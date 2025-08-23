@@ -1,0 +1,16 @@
+#scrollPowerContainer {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+#powerBar {
+    background: linear-gradient(black, black 10%, green 10%,yellow 40%, red 70%);
+    width: 200px;
+    height: 3000px;
+}
+
+#indicator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
