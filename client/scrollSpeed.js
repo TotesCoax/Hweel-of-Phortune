@@ -1,3 +1,11 @@
+console.log('File Loaded')
+
+const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
+
+socket.on("connect", () => {
+    console.log(socket.id)
+})
+
 const scrollPowerContainer = document.getElementById("scrollPowerContainer")
 
 scrollPowerContainer.addEventListener("scroll", startScrollCalculations)

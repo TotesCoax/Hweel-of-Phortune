@@ -27,7 +27,7 @@ const QRCode = require('qrcode')
 function generateQRCodeForServer(port){
     DNS.lookup(OS.hostname(),{family: 4}, function(err, add, fam){
         console.log('The server is on.', `http://${add}:${port}/`)
-        QRCode.toFile(`${__dirname}/qrcode.png`, `http://${add}:${port}/`, {type: 'png'}, function (err) {
+        QRCode.toFile(`${__dirname}/qrcode.png`, `http://${add}:${port}/player`, {type: 'png'}, function (err) {
             if (err) throw err
             console.log('QR Code Created')
         })
@@ -35,13 +35,17 @@ function generateQRCodeForServer(port){
 
 }
 
-
-io.on("connection", (client) => {
-
+// Socket IO Server Stuff
+io.on('connection', (client) => {
     console.log("It appears we have a visitor. Put on the tea.", client.id)
+    client.on('disconnect', (reason) => {
+        console.log(`${client.id} disconnected. Reason: ${reason}`)
+    })
 })
 
-app.get('/', (req, res) => {
+
+// Serving the HTML Files
+app.get('/player', (req, res) => {
     res.sendFile(__dirname + '/client/scrollSpeed.html')
 })
 
