@@ -10,15 +10,31 @@ const server = http.createServer(app)
 const { Server } = require("socket.io")
 const io = new Server(server)
 
+//Utilities for Connection related stuff
+const DNS = require('dns')
+const OS = require('os')
+
+function getServerIP(){
+    let ipv4
+    
+
+    console.log(ipv4)
+}
+
 // QRCode Stuff
 const QRCode = require('qrcode')
 
-QRCode.toFile(`${__dirname}/qrcode.png`, `http://192.168.0.116:3000/`, {
-    type: 'png'
-}, function (err) {
-    if (err) throw err
-    console.log('QR Code Created')
-})
+function generateQRCodeForServer(port){
+    DNS.lookup(OS.hostname(),{family: 4}, function(err, add, fam){
+        console.log('The server is on.', `http://${add}:${port}/`)
+        QRCode.toFile(`${__dirname}/qrcode.png`, `http://${add}:${port}/`, {type: 'png'}, function (err) {
+            if (err) throw err
+            console.log('QR Code Created')
+        })
+    })
+
+}
+
 
 io.on("connection", (client) => {
 
@@ -31,5 +47,5 @@ app.get('/', (req, res) => {
 
 server.listen(3000, () => {
     const addressInfo = server.address()
-    console.log('The server is on.', `http://${addressInfo.address}:${addressInfo.port}/`)
+    generateQRCodeForServer(addressInfo.port)
 })
