@@ -8,9 +8,24 @@ socket.on("connect", () => {
 
 const scrollPowerContainer = document.getElementById("scrollPowerContainer")
 
-scrollPowerContainer.addEventListener("scroll", startScrollCalculations)
+scrollPowerContainer.addEventListener("touchstart", startScrollCalculations)
 
-scrollPowerContainer.addEventListener("scrollend", stopScrollCalculations)
+scrollPowerContainer.addEventListener("touchend", stopScrollCalculations)
+
+// On/Off for calc function example
+function startScrollCalculations() {
+  scrollSpeedToSend = 0
+  scrollRecorder = setInterval(calculateScrollSpeedInterval, 1)
+}
+
+function stopScrollCalculations() {
+  clearInterval(scrollRecorder)
+  console.log(scrollSpeedToSend)
+  document.querySelector("#speedData").innerText = scrollSpeedToSend
+  scrollPowerContainer.scroll({top: 0, behavior: "smooth"})
+  socket.emit("speedData", scrollSpeedToSend)
+}
+
 
 let lastScrollY = scrollPowerContainer.scrollTop,
   lastTime = Date.now(),
@@ -43,16 +58,4 @@ function calculateScrollSpeedInterval(){
 }
 
     
-// On/Off for calc function example
-function startScrollCalculations() {
-  scrollSpeedToSend = 0
-  scrollRecorder = setInterval(calculateScrollSpeedInterval, 1)
-}
-
-function stopScrollCalculations() {
-  clearInterval(scrollRecorder)
-  console.log(scrollSpeedToSend)
-  document.querySelector("#speedData").innerText = scrollSpeedToSend
-  scrollPowerContainer.scroll({top: 0, behavior: "smooth"})
-}
 

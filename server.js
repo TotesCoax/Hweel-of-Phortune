@@ -14,13 +14,6 @@ const io = new Server(server)
 const DNS = require('dns')
 const OS = require('os')
 
-function getServerIP(){
-    let ipv4
-    
-
-    console.log(ipv4)
-}
-
 // QRCode Stuff
 const QRCode = require('qrcode')
 
@@ -36,18 +29,26 @@ function generateQRCodeForServer(port){
 }
 
 // Socket IO Server Stuff
-io.on('connection', (client) => {
-    console.log("It appears we have a visitor. Put on the tea.", client.id)
-    client.on('disconnect', (reason) => {
-        console.log(`${client.id} disconnected. Reason: ${reason}`)
+io.on('connection', (player) => {
+    console.log("It appears we have a visitor. Put on the tea.", player.id)
+    player.on('disconnect', (reason) => {
+        console.log(`${player.id} disconnected. Reason: ${reason}`)
+    })
+    player.on('speedData', (data) => {
+        console.log(data)
     })
 })
 
 
 // Serving the HTML Files
 app.get('/player', (req, res) => {
-    res.sendFile(__dirname + '/client/scrollSpeed.html')
+    res.sendFile(__dirname + '/client/playerScreen.html')
 })
+
+app.get('/board', (req, res) => {
+    res.sendFile(__dirname + '/client/mainScreen.html')
+})
+
 
 server.listen(3000, () => {
     const addressInfo = server.address()
