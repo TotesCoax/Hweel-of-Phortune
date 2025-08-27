@@ -54,3 +54,10 @@ server.listen(3000, () => {
     const addressInfo = server.address()
     generateQRCodeForServer(addressInfo.port)
 })
+
+// Board Stuff
+const { Board } = require("./classes/Board")
+
+let gameBoard = new Board("Congrats are in order")
+
+// gameBoard.board.forEach(row => console.table(row))
