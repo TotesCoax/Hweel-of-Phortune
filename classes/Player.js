@@ -1,8 +1,11 @@
-const { v4: uuidv4 } = require('uuid')
 
 class Player{
-    constructor(){
-        this.id = uuidv4()
+    /**
+     * 
+     * @param {number} id unique ID for the player 
+     */
+    constructor(id){
+        this.id = id
         this.name = ''
         this.score = 0
         this.color = ''
