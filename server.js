@@ -60,4 +60,11 @@ const { Board } = require("./classes/Board")
 
 let gameBoard = new Board("Congrats are in order")
 
-// gameBoard.board.forEach(row => console.table(row))
+gameBoard.handleGuess('O')
+
+gameBoard.board.forEach(row => console.table(row))
+
+// Player Stuff
+
+const { Player } = require('./classes/Player')
+const { v4: makeID } = require('uuid') //For Making Unique IDs
