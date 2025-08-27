@@ -27,7 +27,7 @@ class Letter{
         this.character = char.toUpperCase()
         this.isVowel = this.checkVowel()
         this.isLetter = this.checkLetter()
-        if(!this.isPunc){
+        if(this.isPunc){
             this.revealed = true
         }
         if(this.isLetter || this.isPunc){

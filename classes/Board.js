@@ -89,7 +89,6 @@ class Board{
             rowFromBoard[index].assignCharacter(letter)
             index++
         }
-        console.log('End result')
     }
     /**
      * 
@@ -120,6 +119,12 @@ class Board{
                 throw `Failed to populate`
         }
     }
+    /**
+     * Handles guesses and also buying of vowels.
+     * For guesses, times returned number by the wheel amount, for voweled multiply the cost of vowels by the returned amount.
+     * @param {string} guessLetter 
+     * @returns {number} number of found letters
+     */
     handleGuess(guessLetter){
         let foundLetters = 0
         for (const row of this.board) {
@@ -130,6 +135,7 @@ class Board{
                 }
             }
         }
+        console.log(foundLetters)
         return foundLetters
     }
 }
