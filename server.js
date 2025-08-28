@@ -58,13 +58,28 @@ server.listen(3000, () => {
 // Board Stuff
 const { Board } = require("./classes/Board")
 
-let gameBoard = new Board("Congrats are in order")
+// let gameBoard = new Board("Congrats are in order")
 
-gameBoard.handleGuess('O')
+// gameBoard.handleGuess('O')
 
-gameBoard.board.forEach(row => console.table(row))
+// gameBoard.board.forEach(row => console.table(row))
 
 // Player Stuff
 
 const { Player } = require('./classes/Player')
 const { v4: makeID } = require('uuid') //For Making Unique IDs
+
+// Wheel Stuff
+
+const { Wheel } = require('./classes/Wheel.js')
+
+let wheeltest = new Wheel()
+
+wheeltest.generateSections(24, 2000)
+console.log(wheeltest)
+
+let holder = []
+
+for (let index = 0; index < 10000; index++) {
+    holder.push(wheeltest.spinWheel(25))
+}

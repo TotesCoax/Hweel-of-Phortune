@@ -1,10 +1,12 @@
-// console.log('File Loaded')
+import WheelSpinner from "./classes/WheelSpinner"
 
-// const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
+console.log('File Loaded')
 
-// socket.on("connect", () => {
-//     console.log(socket.id)
-// })
+const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
+
+socket.on("connect", () => {
+    console.log(socket.id)
+})
 
 function generateBoard(){
     let board = [new Array(12).fill("1"), new Array(12).fill("2"), new Array(12).fill("3"), new Array(12).fill("4")]
@@ -27,3 +29,7 @@ function renderBoard(arrayByLetter){
 }
 
 renderBoard(generateBoard())
+
+let testModule = new TestModule()
+
+console.log(testModule.value)
