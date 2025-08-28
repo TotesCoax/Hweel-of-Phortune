@@ -1,28 +1,72 @@
 class Wheel{
     constructor(){
         this.sections = []
+        this.sectionWidthInDeg = 0
+        this.currentDeg = 0
         this.minValue = 3
         this.maxValue = 9
+        this.speedPowerFactor = 14 //7.2 is roughly the factor to get a 50 power spin to go 360 degrees, if i did the math correct (360/50)
     }
-    generateSections(numberOfSections, bonusValue){
+    /**
+     * 
+     * @param {number} numberOfSections number of sections in the wheel, defaults to 24
+     * @param {number} bonusValue the one big bonus space value, it increases each round in the game.
+     */
+    generateSections(numberOfSections = 24, bonusValue){
         let sectionValues = [],
             specialSpaces = 4,
             requiredNumbers = numberOfSections - specialSpaces
         for (let index = 0; index < requiredNumbers; index++) {
-            sectionValues.push(this.getRandomValue())
+            sectionValues.push(this.getRandomValue(this.minValue, this.maxValue))
         }
-        sectionValues.push[bonusValue, 'bankrupt', 'lose a turn', 'lose a turn']
+        sectionValues.push(bonusValue, 'bankrupt', 'lose a turn', 'lose a turn')
         this.sections = sectionValues
+        this.shuffleSections()
+        this.sectionWidthInDeg = 360 / this.sections.length
     }
-    getRandomValue(){
-        return (Math.floor(Math.random() * (this.maxValue - this.minValue + 1)) + this.minValue) * 100
+    getRandomValue(min, max){
+        return (Math.floor(Math.random() * (max - min + 1)) + min) * 100
+    }
+    coinFlip(){
+        return Math.random() < .5
     }
     shuffleSections(){
             for (let i = this.sections.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1))
-            let temp = this.players[i]
-            this.sections[i] = this.players[j]
+            let temp = this.sections[i]
+            this.sections[i] = this.sections[j]
             this.sections[j] = temp
         }
     }
+    calcRandomNudge(baseNum){
+        let nudgeValue = baseNum * Math.random()
+        if (this.coinFlip()){
+            return nudgeValue
+        } else {
+            return nudgeValue * -1
+        }
+    }
+    calcWheelSpinPowerInDegrees(speedFromPhone){
+        // .6 is a stdv of about 8.5 over 10000 spins, which is like +/- one half section
+        return Math.round((speedFromPhone * this.speedPowerFactor) + (this.calcRandomNudge(speedFromPhone) *.6)) 
+    }
+    resetCurrentDeg(){
+        while (this.currentDeg > 360){
+            this.currentDeg -= 360
+        }
+        return this.currentDeg
+    }
+    spinWheel(speedFromPhone){
+        let rotation = this.calcWheelSpinPowerInDegrees(speedFromPhone)
+        this.currentDeg += rotation
+        this.resetCurrentDeg()
+        return rotation
+    }
+    readWheel(){
+        let reading = this.sections[this.currentDeg/this.sectionWidthInDeg]
+        console.log(reading)
+        return reading
+    }
 }
+
+module.exports = { Wheel }
