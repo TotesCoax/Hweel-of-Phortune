@@ -39,7 +39,7 @@ class Wheel{
         }
     }
     calcRandomNudge(baseNum){
-        let nudgeValue = baseNum * Math.random()
+        let nudgeValue = baseNum * (1 + Math.random())
         if (this.coinFlip()){
             return nudgeValue
         } else {
@@ -48,7 +48,7 @@ class Wheel{
     }
     calcWheelSpinPowerInDegrees(speedFromPhone){
         // .6 is a stdv of about 8.5 over 10000 spins, which is like +/- one half section
-        return Math.round((speedFromPhone * this.speedPowerFactor) + (this.calcRandomNudge(speedFromPhone) *.6)) 
+        return Math.round((speedFromPhone * this.speedPowerFactor) + (this.calcRandomNudge(speedFromPhone))) 
     }
     resetCurrentDeg(){
         while (this.currentDeg > 360){
@@ -63,8 +63,8 @@ class Wheel{
         return rotation
     }
     readWheel(){
-        let reading = this.sections[this.currentDeg/this.sectionWidthInDeg]
-        console.log(reading)
+        let reading = this.sections[Math.floor(this.currentDeg/this.sectionWidthInDeg)]
+        // console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
         return reading
     }
 }
