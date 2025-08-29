@@ -42,7 +42,7 @@ class PlayerHandler{
         return newPlayer.id
     }
     findPlayer(playerId){
-        return this.players.findIndex(seat => seat.id = playerId)
+        return this.players.findIndex(seat => seat.id === playerId)
     }
 }
 
