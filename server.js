@@ -36,6 +36,8 @@ io.on('connection', (player) => {
     })
     player.on('speedData', (data) => {
         console.log(data)
+        let spinPower = wheeltest.spinWheel(data)
+        console.log(spinPower)
     })
 })
 
@@ -58,11 +60,10 @@ server.listen(3000, () => {
 // Board Stuff
 const { Board } = require("./classes/Board")
 
-// let gameBoard = new Board("Congrats are in order")
+let gameBoard = new Board("Congrats are in order")
 
-// gameBoard.handleGuess('O')
-
-// gameBoard.board.forEach(row => console.table(row))
+gameBoard.board.forEach(row => console.table(row))
+console.log(gameBoard)
 
 // Player Stuff
 
@@ -75,11 +76,7 @@ const { Wheel } = require('./classes/Wheel.js')
 
 let wheeltest = new Wheel()
 
-wheeltest.generateSections(24, 2000)
-console.log(wheeltest)
+// wheeltest.generateSections(24, 2000)
+// console.log(wheeltest)
 
-let holder = []
 
-for (let index = 0; index < 10000; index++) {
-    holder.push(wheeltest.spinWheel(25))
-}
