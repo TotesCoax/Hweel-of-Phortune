@@ -126,17 +126,24 @@ class Board{
      * @returns {number} number of found letters
      */
     handleGuess(guessLetter){
-        let foundLetters = 0
+        if(this.letterAlreadyGuessed(guessLetter)){
+            return guessLetter
+        }
+        this.guessedLetters.push(guessLetter)
+        let numFoundLetters = 0
         for (const row of this.board) {
             for (const letter of row) {
                 if(guessLetter === letter.character){
                     letter.revealLetter()
-                    foundLetters++
+                    numFoundLetters++
                 }
             }
         }
-        console.log(foundLetters)
-        return foundLetters
+        console.log('Letters found:', numFoundLetters, this.guessedLetters)
+        return numFoundLetters
+    }
+    letterAlreadyGuessed(guessLetter){
+        return this.guessedLetters.findIndex(letter => letter === guessLetter) >= 0
     }
 }
 
