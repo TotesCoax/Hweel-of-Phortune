@@ -1,4 +1,4 @@
-import WheelSpinner from "./classes/WheelSpinner"
+import WheelSpinner from "./classes/WheelSpinner.js"
 
 console.log('File Loaded')
 
@@ -28,8 +28,37 @@ function renderBoard(arrayByLetter){
 
 }
 
-renderBoard(generateBoard())
 
-let testModule = new TestModule()
+let sections = document.querySelectorAll('.wheel-section'),
+    degreeIncrement = 0
 
-console.log(testModule.value)
+sections.forEach(section => {
+    console.log(section, degreeIncrement)
+    section.style.transform = `rotate(${degreeIncrement}deg)`
+    degreeIncrement += 15
+})
+
+let wheelContainer = document.getElementById('wheelContainer')
+
+wheelContainer.addEventListener('animationend', resetCurrentDeg)
+
+function resetCurrentDeg(){
+    console.log('Wheel Resetting', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
+    let newVal = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
+    wheelContainer.style.transform = `rotate(${newVal})`
+    wheelContainer.classList.remove('spinning')
+    console.log('Wheel Reset', wheelContainer.style)
+}
+
+function setSpinAnim(start, end){
+    document.documentElement.style.setProperty('--starting-degree', start)
+    document.documentElement.style.setProperty('--ending-degree', end)
+}
+
+function spinWheel(power){
+    let start = wheelContainer.style.transform
+    setSpinAnim(start, `${power}deg`)
+    wheelContainer.classList.add('spinning')
+}
+
+spinWheel(450)
