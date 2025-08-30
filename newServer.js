@@ -1,6 +1,6 @@
 const {LocallyConnectedServer} = require('./classes/LocallyConnectedServer')
 
-const NewGame = new LocallyConnectedServer()
+const NewGame = new LocallyConnectedServer('client')
 
 // Socket IO Server Stuff
 NewGame.io.on('connection', (player) => {
@@ -25,7 +25,7 @@ NewGame.app.get('/board', (req, res) => {
     res.sendFile(__dirname + '/client/mainScreen.html')
 })
 
-
+// Spin up the server
 NewGame.server.listen(3000, () => {
     const addressInfo = NewGame.server.address()
     NewGame.generateQRCodeForServer(addressInfo.port)
