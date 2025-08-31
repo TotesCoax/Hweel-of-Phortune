@@ -2,8 +2,8 @@ const {Letter} = require('./Letter')
 
 class Board{
     /**
-     * 
-     * @param {string} phrase 
+     * @param {string} clue Clue to display to players
+     * @param {string} phrase The Phrase the players need to solve
      */
     constructor(clue, phrase){
         this.rowCount = 4
