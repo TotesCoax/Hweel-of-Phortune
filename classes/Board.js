@@ -5,7 +5,7 @@ class Board{
      * 
      * @param {string} phrase 
      */
-    constructor(phrase){
+    constructor(clue, phrase){
         this.rowCount = 4
         this.colCount = 12
         this.maxChar = this.rowCount * this.colCount
@@ -15,7 +15,11 @@ class Board{
         this.racks = this.rackRows(this.phrase)
         this.populateBoard(this.racks)
         this.guessedLetters = []
+        this.clue = clue
     }
+    /**
+     * Checks if phrase is too long to parse into the board.
+     */
     tooManyChars(){
         if(this.phrase > this.maxChar){
             throw 'This phrase is too large to fit the board.'
@@ -30,9 +34,7 @@ class Board{
         return words.trim().split(' ')
     }
     /**
-     * 
-     * @param {number} rowCount 
-     * @param {number} colCount 
+     * Generates a black board full of Letter objects. 
      * @returns {Letter[][]}
      */
     generateBoard(){
@@ -46,17 +48,8 @@ class Board{
         }
         return board
     }
-    getLengthsOfWords(arrayOfWords){
-        let charCounts = []
-
-        for (const word of arrayOfWords) {
-            charCounts.push(word.length)
-        }
-
-        return charCounts
-    }
     /**
-     * 
+     * Parses the phrase into letters, and formats it so it fits words onto each row with no breaking.
      * @returns {string[]}
      */
     rackRows(){
@@ -76,12 +69,18 @@ class Board{
         rows.push(rack)
         return rows
     }
+    /**
+     * Finds which index to start on each row, roughly centering the row of letters.
+     * @param {stringtring[]} row 
+     * @returns {number} 
+     */
     findStartingSpot(row){
         return Math.round((this.colCount - row.length)/2)
     }
     /**
      * 
-     * @param {Letter[]} rowFromBoard 
+     * @param {Letter[]} rowFromBoard Row from the generated board to be filled.
+     * @param {string[]} parsedRow Array of parsed/racked letters to apply to board.
      */
     assignLettersToRow(rowFromBoard, parsedRow){
         let index = this.findStartingSpot(parsedRow)
@@ -91,7 +90,7 @@ class Board{
         }
     }
     /**
-     * 
+     * Fills the generated board with parsed letters. It's not dynamic right now, but I would need to overhaul quite a bit to handle more than 4 rows.
      * @param {string[]} rackedRows 
      */
     populateBoard(rackedRows){
@@ -127,7 +126,7 @@ class Board{
      */
     handleGuess(guessLetter){
         if(this.letterAlreadyGuessed(guessLetter)){
-            return guessLetter
+            throw 'Letter already guessed.'
         }
         this.guessedLetters.push(guessLetter)
         let numFoundLetters = 0
@@ -142,6 +141,11 @@ class Board{
         console.log('Letters found:', numFoundLetters, this.guessedLetters)
         return numFoundLetters
     }
+    /**
+     * 
+     * @param {string} guessLetter 
+     * @returns {boolean} Whether or not the letter is recorded in the guessed letters array.
+     */
     letterAlreadyGuessed(guessLetter){
         return this.guessedLetters.findIndex(letter => letter === guessLetter) >= 0
     }
