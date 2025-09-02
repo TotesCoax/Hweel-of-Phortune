@@ -5,7 +5,7 @@ class Board{
      * @param {string} clue Clue to display to players
      * @param {string} phrase The Phrase the players need to solve
      */
-    constructor(clue, phrase){
+    constructor(clue = 'Initial Setup', phrase = "Board has been created"){
         this.rowCount = 4
         this.colCount = 12
         this.maxChar = this.rowCount * this.colCount
