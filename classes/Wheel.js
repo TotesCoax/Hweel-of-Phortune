@@ -1,6 +1,6 @@
 class Wheel{
-    constructor(){
-        this.sections = []
+    constructor(sections = []){
+        this.sections = sections
         this.sectionWidthInDeg = 0
         this.currentDeg = 0
         this.minValue = 3
@@ -9,10 +9,10 @@ class Wheel{
     }
     /**
      * 
-     * @param {number} numberOfSections number of sections in the wheel, defaults to 24
      * @param {number} bonusValue the one big bonus space value, it increases each round in the game.
+     * @param {number} numberOfSections number of sections in the wheel, defaults to 24
      */
-    generateSections(numberOfSections = 24, bonusValue){
+    generateSections(bonusValue, numberOfSections = 24){
         let sectionValues = [],
             specialSpaces = 4,
             requiredNumbers = numberOfSections - specialSpaces
