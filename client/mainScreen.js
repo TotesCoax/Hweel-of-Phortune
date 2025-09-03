@@ -6,6 +6,9 @@ const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
     console.log(socket.id)
+    socket.emit('boardJoin', socket.id, (res) => {
+      console.log(res)
+    })
 })
 
 function generateBoard(){

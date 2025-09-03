@@ -5,12 +5,22 @@ const NewGame = new LocallyConnectedServer('client')
 // Socket IO Server Stuff
 NewGame.io.on('connection', (player) => {
     console.log("It appears we have a visitor. Put on the tea.", player.id)
+    player.on('playerJoin', (id, callback) =>{
+        player.join('players')
+        console.log(`Player joined room`)
+        callback('Room joined')
+    })
+    player.on('boardJoin', (id, callback) =>{
+        player.join('board')
+        console.log(`Board joined board room`)
+        callback('Room joined')
+    })
     player.on('disconnect', (reason) => {
         console.log(`${player.id} disconnected. Reason: ${reason}`)
     })
     player.on('speedData', (data) => {
         console.log(data)
-        let spinPower = wheeltest.spinWheel(data)
+        let spinPower = game.Wheel.spinWheel(data)
         console.log(spinPower)
     })
 })

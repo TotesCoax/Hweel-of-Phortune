@@ -4,6 +4,9 @@ const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
     console.log(socket.id)
+    socket.emit('playerJoin', socket.id, (res) => {
+      console.log(res)
+    })
 })
 
 const scrollPowerContainer = document.getElementById("scrollPowerContainer")
@@ -21,7 +24,6 @@ function startScrollCalculations() {
 function stopScrollCalculations() {
   clearInterval(scrollRecorder)
   console.log(scrollSpeedToSend)
-  document.querySelector("#speedData").innerText = scrollSpeedToSend
   scrollPowerContainer.scroll({top: 0, behavior: "smooth"})
   socket.emit("speedData", scrollSpeedToSend)
 }
@@ -61,7 +63,7 @@ function calculateScrollSpeedInterval(){
 function resizePowerBar(){
   let powerBar = document.getElementById("powerBar"),
       viewportHeight = window.innerHeight,
-      containerHeight = Math.round(viewportHeight * .9),
+      containerHeight = Math.round(viewportHeight * .95),
       barTotalHeight = Math.round(containerHeight * 2.0),
       blackRatio = Math.round((containerHeight/barTotalHeight)*100),
       colorFactor = Math.round((100 - blackRatio)/3)
@@ -77,3 +79,21 @@ function resizePowerBar(){
 }
 
 resizePowerBar()
+
+
+// Menu Stuff
+
+const menuDisplay = document.getElementById('menuDisplay'),
+      menuContent = document.getElementById('menuContent'),
+      leftArrow = document.getElementById('leftArrow'),
+      rightArrow = document.getElementById('rightArrow')
+
+menuDisplay.addEventListener('click', (event) => {
+  console.log(event.target, event.target.closest('#menuContent > *'))
+  if (event.target.closest('#menuContent > *')){
+    return
+  }
+  menuContent.classList.toggle('hidden')
+  leftArrow.classList.toggle('hidden')
+  rightArrow.classList.toggle('hidden')
+})

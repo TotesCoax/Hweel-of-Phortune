@@ -10,15 +10,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="scrollPowerContainer">
-        <div id="powerBar"></div>
-    </div>
-    <div style="background-color: white;">
-        <div id="logData">
-            <p>Speed Sent</p>
-            <p id="speedData"></p>
+    <div id="controllerContainer">
+        <div id="scrollPowerContainer">
+            <div id="powerBar"></div>
         </div>
-        <div id="letterDisplay"></div>
+        <div id="menuDisplay">
+            <div id="menuOpen">
+                <p id="leftArrow" class="arrow">&#10218;</p>
+                <p id="rightArrow" class="arrow hidden">&#10219;</p>
+            </div>
+            <div id="menuContent" class="hidden">
+                <div id="namePicker" class="flex-col-center">
+                    <label for="nameInput">Enter your player name:</label>
+                    <input type="text" id="nameInput" name="nameInput">
+                </div>
+                <div id="colorPicker" class="flex-col-center">
+                    <label for="colorInput">Custom color:</label>
+                    <input type="color" name="colorInput" id="colorInput">
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
