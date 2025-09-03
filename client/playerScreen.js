@@ -1,10 +1,37 @@
 console.log('File Loaded')
 
+/**
+ * @typedef {object} PlayerInfo
+ * @property {string} id - id from the server
+ * @property {string} name - user selected name
+ * @property {string} color - hex code of player color
+ */
+let playerInfo = {
+  id: false,
+  name: '',
+  color: ''
+}
+
+function updateLocalStorage(){
+  let value = JSON.stringify(playerInfo)
+  window.localStorage.setItem('playerInfo', value)
+}
+
+/**
+ * 
+ * @returns {PlayerInfo} - parse player info from localStorage
+ */
+function getPlayerDataFromLocal(){
+  let playerString = window.localStorage.getItem('playerInfo')
+  return JSON.parse(playerString)
+}
+
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
     console.log(socket.id)
-    socket.emit('playerJoin', socket.id, (res) => {
+    let playerID = getPlayerDataFromLocal().id
+    socket.emit('playerJoin', playerID, (res) => {
       console.log(res)
     })
 })
@@ -86,7 +113,9 @@ resizePowerBar()
 const menuDisplay = document.getElementById('menuDisplay'),
       menuContent = document.getElementById('menuContent'),
       leftArrow = document.getElementById('leftArrow'),
-      rightArrow = document.getElementById('rightArrow')
+      rightArrow = document.getElementById('rightArrow'),
+      nameInput = document.getElementById('nameInput'),
+      colorInput = document.getElementById('colorInput')
 
 menuDisplay.addEventListener('click', (event) => {
   console.log(event.target, event.target.closest('#menuContent > *'))
@@ -97,3 +126,12 @@ menuDisplay.addEventListener('click', (event) => {
   leftArrow.classList.toggle('hidden')
   rightArrow.classList.toggle('hidden')
 })
+
+nameInput.addEventListener('change', () => {
+  socket.emit('nameChange', nameInput.value)
+})
+
+colorInput.addEventListener('change', () => {
+  socket.emit('colorChange', colorInput.value)
+})
+
