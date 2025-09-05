@@ -4,11 +4,13 @@ console.log('File Loaded')
  * @typedef {object} PlayerInfo
  * @property {string} id - id from the server
  * @property {string} name - user selected name
+ * @property {number} score - score for the game
  * @property {string} color - hex code of player color
  */
 let playerInfo = {
-  id: false,
+  id: 'new',
   name: '',
+  score: '',
   color: ''
 }
 
@@ -30,11 +32,15 @@ const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
     console.log(socket.id)
-    let playerID = getPlayerDataFromLocal().id
+    let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().id : ''
     socket.emit('playerJoin', playerID, (res) => {
       console.log(res)
+      playerInfo = res
+      updateLocalStorage()
     })
 })
+
+// Power Bar shit
 
 const scrollPowerContainer = document.getElementById("scrollPowerContainer")
 
@@ -128,10 +134,10 @@ menuDisplay.addEventListener('click', (event) => {
 })
 
 nameInput.addEventListener('change', () => {
-  socket.emit('nameChange', nameInput.value)
+  socket.emit('nameChange', {id: playerInfo.id, name: nameInput.value})
 })
 
 colorInput.addEventListener('change', () => {
-  socket.emit('colorChange', colorInput.value)
+  socket.emit('colorChange', {id: playerInfo.id, color: colorInput.value})
 })
 

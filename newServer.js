@@ -7,12 +7,20 @@ const GameServer = new LocallyConnectedServer('client')
 GameServer.io.on('connection', (player) => {
     console.log("It appears we have a visitor. Put on the tea.", player.id)
     player.on('playerJoin', (id, callback) =>{
-        if (id){
+        console.log('Player Join: ', id)
+        if (WOF.PlayerHandler.findPlayer(id) < 0){
             console.log(WOF.PlayerHandler.findPlayer(id))
+            let newPlayerID = makeID()
+            WOF.PlayerHandler.addPlayer(newPlayerID)
+            console.table(WOF.PlayerHandler.players)
+            callback(WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(newPlayerID)])
+        } else {
+            console.log(WOF.PlayerHandler.findPlayer(id))
+            console.table(WOF.PlayerHandler.players)
+            callback(WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(id)])
         }
         player.join('players')
         console.log(`Player joined room`)
-        callback('Room joined')
     })
     player.on('boardJoin', (id, callback) =>{
         player.join('board')
@@ -30,9 +38,15 @@ GameServer.io.on('connection', (player) => {
     })
     player.on('nameChange', (data) => {
         console.log(data)
+        let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
+        player.setColor(data.name)
+        GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
     player.on('colorChange', (data) => {
         console.log(data)
+        let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
+        player.setName(data.color)
+        GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
 })
 
@@ -53,6 +67,7 @@ GameServer.server.listen(3000, () => {
 })
 
 const {WOFGame} = require('./classes/WOFGame')
+const { Player } = require('./classes/Player')
 
 const WOF = new WOFGame()
 
