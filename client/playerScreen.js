@@ -133,11 +133,11 @@ menuDisplay.addEventListener('click', (event) => {
   rightArrow.classList.toggle('hidden')
 })
 
-nameInput.addEventListener('change', () => {
+nameInput.addEventListener('input', () => {
   socket.emit('nameChange', {id: playerInfo.id, name: nameInput.value})
 })
 
-colorInput.addEventListener('change', () => {
+colorInput.addEventListener('input', () => {
   socket.emit('colorChange', {id: playerInfo.id, color: colorInput.value})
 })
 
