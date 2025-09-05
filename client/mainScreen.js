@@ -1,14 +1,16 @@
-import WheelSpinner from "./classes/WheelSpinner.js"
-
 console.log('File Loaded')
 
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
-socket.on("connect", () => {
+socket.on('connect', () => {
     console.log(socket.id)
     socket.emit('boardJoin', socket.id, (res) => {
       console.log(res)
     })
+})
+
+socket.on('playerUpdate', (data) => {
+    console.log(data)
 })
 
 function generateBoard(){

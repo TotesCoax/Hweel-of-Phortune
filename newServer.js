@@ -39,13 +39,13 @@ GameServer.io.on('connection', (player) => {
     player.on('nameChange', (data) => {
         console.log(data)
         let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
-        player.setColor(data.name)
+        player.setName(data.name)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
     player.on('colorChange', (data) => {
         console.log(data)
         let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
-        player.setName(data.color)
+        player.setColor(data.color)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
 })
