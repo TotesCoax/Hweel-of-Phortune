@@ -6,6 +6,15 @@ socket.on('connect', () => {
     console.log(`Socket Id: ${socket.id}`)
     socket.emit('boardJoin', socket.id, (res) => {
       console.log(`Data from server: ${res}`)
+      if (board){
+        return
+      }
+      socket.emit('boardRequest', socket.id, (res)=> {
+        console.log(res)
+        renderBoard(res.board)
+        renderClue(res.clue)
+        renderGuessedLetters(res.guessedLetters)
+      })
     })
 })
 
@@ -17,6 +26,8 @@ socket.on('playerUpdate', (data) => {
 // socket.on('boardUpdate', boardUpdate)
 
 // Board stuff
+
+let board = false
 
 function generateTestBoard(){
     let board = [new Array(12).fill("1"), new Array(12).fill("2"), new Array(12).fill("3"), new Array(12).fill("4")]
@@ -54,7 +65,7 @@ function renderBoard(arrayByLetter){
         for (const col of row) {
             let letter = document.createElement("p"),
                 holder = document.createElement('div')
-            letter.innerText = col
+            letter.innerText = col.character
             switch (true) {
                 case col.revealed:
                     letter.classList.add('revealed')
@@ -83,6 +94,19 @@ function renderClue(clue){
     clueContainer.append(newP)
 }
 
+/**
+ * @param {string} arrayOfChar - array of guessed letters
+ */
+function renderGuessedLetters(arrayOfChar){
+    let usedLettersContainer = document.getElementById('usedLettersContainer')
+    clearChildren(usedLettersContainer)
+    arrayOfChar.forEach(letter => {
+        let p = document.createElement('p')
+        p.innerText = letter
+        usedLettersContainer.append(p)
+    })
+}
+
 // Wheel Stuff
 
 /**
@@ -103,6 +127,7 @@ arrangeWheelSections()
 
 let wheelContainer = document.getElementById('wheelContainer')
 
+// when animation ends, trigger a value reset
 wheelContainer.addEventListener('animationend', resetCurrentDeg)
 
 /**
@@ -159,6 +184,3 @@ function hexToRGB(h) {
 }
 
 spinWheel(450)
-
-renderBoard('Kreeps and Margaritas')
-renderClue('A lovely night')

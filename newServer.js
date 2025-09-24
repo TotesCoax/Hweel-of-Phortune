@@ -27,6 +27,10 @@ GameServer.io.on('connection', (player) => {
         console.log(`Board joined board room`)
         callback('Room joined')
     })
+    player.on('boardRequest', (id, callback) => {
+        console.log(`Board request from: ${id}`)
+        callback(WOF.Board)
+    })
     player.on('disconnect', (reason) => {
         player.leave('players')
         console.log(`${player.id} disconnected. Reason: ${reason}`)
@@ -71,4 +75,10 @@ const { Player } = require('./classes/Player')
 
 const WOF = new WOFGame()
 
-console.log(WOF)
+WOF.Board.handleGuess('e')
+
+// WOF.Board.board.forEach(row => {
+//     console.table(row)
+// })
+
+// console.log(WOF)
