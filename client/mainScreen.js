@@ -18,12 +18,10 @@ socket.on('playerUpdate', (data) => {
 
 // Board stuff
 
-function generateBoard(){
+function generateTestBoard(){
     let board = [new Array(12).fill("1"), new Array(12).fill("2"), new Array(12).fill("3"), new Array(12).fill("4")]
     return board
 }
-
-console.log(generateBoard())
 
 /**
  * 
@@ -87,19 +85,29 @@ function renderClue(clue){
 
 // Wheel Stuff
 
-let sections = document.querySelectorAll('.wheel-section'),
-    degreeIncrement = 0
+/**
+ * This will arrange all the 24 wheel sections around a central point
+ */
+function arrangeWheelSections(){
+    let sections = document.querySelectorAll('.wheel-section'),
+        degreeIncrement = 0
+    
+    sections.forEach(section => {
+        console.log(section, degreeIncrement)
+        section.style.transform = `rotate(${degreeIncrement}deg)`
+        degreeIncrement += 15
+    })
+}
+arrangeWheelSections()
 
-sections.forEach(section => {
-    console.log(section, degreeIncrement)
-    section.style.transform = `rotate(${degreeIncrement}deg)`
-    degreeIncrement += 15
-})
 
 let wheelContainer = document.getElementById('wheelContainer')
 
 wheelContainer.addEventListener('animationend', resetCurrentDeg)
 
+/**
+ * Resets the degree values to more manageable numbers for next calculation.
+ */
 function resetCurrentDeg(){
     console.log('Wheel Resetting', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
     let newVal = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
@@ -113,6 +121,10 @@ function setSpinAnim(start, end){
     document.documentElement.style.setProperty('--ending-degree', end)
 }
 
+/**
+ * 
+ * @param {string} power power value sent down from the server. 
+ */
 function spinWheel(power){
     let start = wheelContainer.style.transform
     setSpinAnim(start, `${power}deg`)
