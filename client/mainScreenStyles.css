@@ -4,14 +4,65 @@
 
 }
 
-#mainBoard {
+body {
+    height: 100vh;
+    margin: 0;
     display: grid;
-    grid: repeat(4, 1fr) / repeat(12, 1fr);
+    grid: 10% 50% 10% 30% / repeat(10, 20%);
+    grid-template-areas: 
+    "title title title title title"
+    "board board board wheel wheel"
+    "board board board clue clue"
+    "players players players players players";
 }
 
+/* Top Section */
+
+#topSection {
+    display: flex;
+    grid-area: title;
+    height: 10%;
+    width: 100vw;
+}
+
+#usedLettersDisplay {
+    width: 20%;
+}
+
+/* Board stuff */
+#mainBoard {
+    background-color: green;
+    grid-area: board;
+    display: grid;
+    grid: repeat(4, 1fr) / repeat(12, 1fr);
+    gap: 1%;
+}
+
+#mainBoard p:not(.processed){
+    background-color: red;
+}
+
+#mainBoard p {
+    background-color: lightgreen;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 5rem;
+    margin: 0;
+}
+
+#mainBoard p.revealed {
+    border-radius: 10%;
+}
+
+#mainBoard p.game-space {
+    background-color: white;
+}
+
+/* Wheel Stuff */
 #wheelContainer {
-    width: 500px;
-    height: 500px;
+    grid-area: wheel;
+    height: 90%;
+    aspect-ratio: 1/1;
     background-color: white;
     border-radius: 50%;
     border: 15px solid black;
@@ -33,11 +84,6 @@
     }
 }
 
-/* #wheelContainer:hover {
-        transform: rotate(450deg);
-
-} */
-
 .wheel-section {
     height: 50%;
     width: 12%;
@@ -55,4 +101,31 @@
     color: black;
     left: 44%;
     background-color: pink;
+}
+
+/* Clue container */
+
+#clueContainer {
+    grid-area: clue;
+}
+
+#clueContainer p {
+    font-size: 3rem;
+    margin: 0;
+}
+
+/* Player Stuff */
+
+#playerContainer {
+    grid-area: players;
+    background-color: pink;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.player-tile {
+    width: 20%;
+    border-radius: 5%;
+    background-color: lightblue;
 }

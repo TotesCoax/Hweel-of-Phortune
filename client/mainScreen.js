@@ -158,6 +158,11 @@ function spinWheel(power){
 
 // Player board stuff
 
+/**
+ * 
+ * @param {string} hex 
+ * @returns {number} If greater than X
+ */
 function getBrightness(hex){
     let rgb = hexToRGB(hex)
 
