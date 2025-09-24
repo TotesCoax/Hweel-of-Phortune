@@ -121,10 +121,11 @@ class Board{
     /**
      * Handles guesses and also buying of vowels.
      * For guesses, times returned number by the wheel amount, for voweled multiply the cost of vowels by the returned amount.
-     * @param {string} guessLetter 
+     * @param {string} letter
      * @returns {number} number of found letters
      */
-    handleGuess(guessLetter){
+    handleGuess(letter){
+        let guessLetter = letter.toUpperCase()
         if(this.letterAlreadyGuessed(guessLetter)){
             throw 'Letter already guessed.'
         }
