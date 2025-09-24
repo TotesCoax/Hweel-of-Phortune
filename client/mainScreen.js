@@ -3,15 +3,15 @@ console.log('File Loaded')
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on('connect', () => {
-    console.log(socket.id)
+    console.log(`Socket Id: ${socket.id}`)
     socket.emit('boardJoin', socket.id, (res) => {
-      console.log(res)
+      console.log(`Data from server: ${res}`)
     })
 })
 
 socket.on('playerUpdate', (data) => {
     // Eventually re-render player board
-    console.log(data)
+    console.log(`Data from Server: ${data}`)
 })
 
 // socket.on('boardUpdate', boardUpdate)
@@ -93,7 +93,7 @@ function arrangeWheelSections(){
         degreeIncrement = 0
     
     sections.forEach(section => {
-        console.log(section, degreeIncrement)
+        // console.log(section, degreeIncrement)
         section.style.transform = `rotate(${degreeIncrement}deg)`
         degreeIncrement += 15
     })
@@ -109,11 +109,11 @@ wheelContainer.addEventListener('animationend', resetCurrentDeg)
  * Resets the degree values to more manageable numbers for next calculation.
  */
 function resetCurrentDeg(){
-    console.log('Wheel Resetting', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
+    console.log('Wheel Resetting to: ', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
     let newVal = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
     wheelContainer.style.transform = `rotate(${newVal})`
     wheelContainer.classList.remove('spinning')
-    console.log('Wheel Reset', wheelContainer.style)
+    console.log('Wheel Reset to: ', wheelContainer.style)
 }
 
 function setSpinAnim(start, end){
@@ -157,9 +157,6 @@ function hexToRGB(h) {
 //   The + somehow magically makes it a number
   return {'red': +r, 'green': +g, 'blue': +b}
 }
-
-console.log(hexToRGB('#fff'))
-console.log(getBrightness('#fff'))
 
 spinWheel(450)
 
