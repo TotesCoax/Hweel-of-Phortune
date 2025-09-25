@@ -27,9 +27,9 @@ GameServer.io.on('connection', (player) => {
         console.log(`Board joined board room`)
         callback('Room joined')
     })
-    player.on('boardRequest', (id, callback) => {
+    player.on('gamestateRequest', (id, callback) => {
         console.log(`Board request from: ${id}`)
-        callback(WOF.Board)
+        callback(WOF)
     })
     player.on('disconnect', (reason) => {
         player.leave('players')
@@ -74,6 +74,8 @@ const {WOFGame} = require('./classes/WOFGame')
 const { Player } = require('./classes/Player')
 
 const WOF = new WOFGame()
+
+WOF.Wheel.generateSections(1000)
 
 WOF.Board.handleGuess('e')
 

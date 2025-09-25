@@ -6,14 +6,16 @@ socket.on('connect', () => {
     console.log(`Socket Id: ${socket.id}`)
     socket.emit('boardJoin', socket.id, (res) => {
       console.log(`Data from server: ${res}`)
-      if (board){
+      if (gamestate){
         return
       }
-      socket.emit('boardRequest', socket.id, (res)=> {
+      socket.emit('gamestateRequest', socket.id, (res)=> {
         console.log(res)
-        renderBoard(res.board)
-        renderClue(res.clue)
-        renderGuessedLetters(res.guessedLetters)
+        gamestate = true
+        renderBoard(res.Board.board)
+        renderClue(res.Board.clue)
+        renderGuessedLetters(res.Board.guessedLetters)
+        renderWheel(res.Wheel.sections)
       })
     })
 })
@@ -27,7 +29,7 @@ socket.on('playerUpdate', (data) => {
 
 // Board stuff
 
-let board = false
+let gamestate = false
 
 function generateTestBoard(){
     let board = [new Array(12).fill("1"), new Array(12).fill("2"), new Array(12).fill("3"), new Array(12).fill("4")]
@@ -123,6 +125,16 @@ function arrangeWheelSections(){
     })
 }
 arrangeWheelSections()
+
+function renderWheel(wheelSections){
+    let sectionDivs = document.querySelectorAll('.wheel-text'),
+        index = 0
+    console.log(`Setting Section Values: ${wheelSections}`)
+    wheelSections.forEach(section => {
+        sectionDivs[index].innerText = section
+        index++
+    })
+}
 
 
 let wheelContainer = document.getElementById('wheelContainer')
