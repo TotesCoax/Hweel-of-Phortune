@@ -2,7 +2,7 @@ const {Player} = require("./Player")
 
 class PlayerHandler{
     /**
-     * @param {Player[]} players 
+     * @param {Player[]} players - an array of Player objects
      */
     constructor(players = []){
         this.players = players
@@ -44,7 +44,7 @@ class PlayerHandler{
      * @returns {string} uuid for game session
      */
     addPlayer(id){
-        if (this.findPlayer(id) >= 0){
+        if (this.isPlayerExists){
             throw 'Player already exists.'
         }
         let newPlayer = new Player(id)
@@ -52,14 +52,20 @@ class PlayerHandler{
         return newPlayer.id
     }
     removePlayer(id){
-        if (this.findPlayer(id) < 0){
+        if (!this.isPlayerExists){
             throw 'No player found'
         }
         let removedPlayer = this.players.splice(this.findPlayer(id))
         return removedPlayer
     }
-    findPlayer(playerId){
+    isPlayerExists(id){
+        return this.getPlayerIndex(id) > 0
+    }
+    getPlayerIndex(playerId){
         return this.players.findIndex(seat => seat.id === playerId)
+    }
+    getPlayer(playerId){
+        return this.players[this.getPlayerIndex(playerId)]
     }
 }
 
