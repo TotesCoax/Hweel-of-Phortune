@@ -61,6 +61,9 @@ class PlayerHandler{
     isPlayerExists(id){
         return this.getPlayerIndex(id) > 0
     }
+    isActivePlayer(id){
+        return this.getPlayerIndex(id) == this.turnIndicator
+    }
     getPlayerIndex(playerId){
         return this.players.findIndex(seat => seat.id === playerId)
     }

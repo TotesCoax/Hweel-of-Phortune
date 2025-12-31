@@ -8,16 +8,16 @@ GameServer.io.on('connection', (player) => {
     console.log("It appears we have a visitor. Put on the tea.", player.id)
     player.on('playerJoin', (id, callback) =>{
         console.log('Player Join: ', id)
-        if (WOF.PlayerHandler.findPlayer(id) < 0){
-            console.log(WOF.PlayerHandler.findPlayer(id))
+        if (!WOF.PlayerHandler.isPlayerExists()){
+            console.log(`Creating new player.`)
             let newPlayerID = makeID()
             WOF.PlayerHandler.addPlayer(newPlayerID)
             console.table(WOF.PlayerHandler.players)
-            callback(WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(newPlayerID)])
+            callback(WOF.PlayerHandler.getPlayer(newPlayerID))
         } else {
-            console.log(WOF.PlayerHandler.findPlayer(id))
+            console.log(WOF.PlayerHandler.getPlayer(id))
             console.table(WOF.PlayerHandler.players)
-            callback(WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(id)])
+            callback(WOF.PlayerHandler.getPlayer(id))
         }
         player.join('players')
         console.log(`Player joined room`)
@@ -37,8 +37,11 @@ GameServer.io.on('connection', (player) => {
     })
     player.on('speedData', (data) => {
         console.log(data)
-        let spinPower = WOF.Wheel.spinWheel(data)
-        console.log(spinPower)
+        // if(WOF.PlayerHandler.isActivePlayer(data.id)){
+            let spinPower = WOF.Wheel.spinWheel(data.value)
+            console.log(spinPower)
+            GameServer.io.to('board').emit('spinValue', spinPower)
+        // }
     })
     player.on('nameChange', (data) => {
         console.log(data)

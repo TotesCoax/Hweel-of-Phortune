@@ -58,7 +58,7 @@ function stopScrollCalculations() {
   clearInterval(scrollRecorder)
   console.log(scrollSpeedToSend)
   scrollPowerContainer.scroll({top: 0, behavior: "smooth"})
-  socket.emit("speedData", scrollSpeedToSend)
+  socket.emit("speedData", {value: scrollSpeedToSend, id: playerInfo.id})
 }
 
 // Scroll Speed Calc Functions
