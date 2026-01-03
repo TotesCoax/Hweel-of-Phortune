@@ -1,6 +1,7 @@
 const {Board} = require('./Board')
 const {Wheel} = require('./Wheel')
 const {PlayerHandler} = require('./PlayerHandler')
+const { create } = require('qrcode')
 
 
 class WOFGame{
@@ -15,7 +16,27 @@ class WOFGame{
         this.Board = new Board(clue, phrase)
         this.Wheel = new Wheel(sections)
         this.PlayerHandler = new PlayerHandler(players)
+        this.isWaitingForSpin = false
+        this.isWaitingForGuess = false
     }
+    /**
+     * 
+     * @param {string} clue 
+     * @param {string} phrase 
+     */
+    startNewRound(clue, phrase){
+        this.createNewBoard(clue, phrase)
+        // For now, let's not scale up point values
+        this.Wheel.shuffleSections()
+    }
+    createNewBoard(clue, phrase){
+        this.Board = new Board(clue, phrase)
+    }
+    shuffleWheel(){
+        this.Wheel.shuffleSections()
+    }
+
+
 }
 
 module.exports = { WOFGame }
