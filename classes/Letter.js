@@ -20,7 +20,7 @@ class Letter{
      * 
      * @param {string} char 
      */
-    assignCharacter(char){
+    setCharacter(char){
         if(char.length != 1){
             throw 'only single characters allowed for letter spaces'
         }
