@@ -1,6 +1,13 @@
 console.log('File Loaded')
 
+import { GameCommunication } from "./classes/GameCommunication.js"
+
+let test = new GameCommunication('Yay')
+
+console.log(test.data)
+
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
+
 
 socket.on('connect', () => {
     console.log(`Socket Id: ${socket.id}`)
