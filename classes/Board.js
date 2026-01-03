@@ -85,7 +85,7 @@ class Board{
     assignLettersToRow(rowFromBoard, parsedRow){
         let index = this.findStartingSpot(parsedRow)
         for (let letter of parsedRow) {
-            rowFromBoard[index].assignCharacter(letter)
+            rowFromBoard[index].setCharacter(letter)
             index++
         }
     }
@@ -120,7 +120,7 @@ class Board{
     }
     /**
      * Handles guesses and also buying of vowels.
-     * For guesses, times returned number by the wheel amount, for voweled multiply the cost of vowels by the returned amount.
+     * For guesses, times returned number by the wheel amount, for vowels subtract cost of vowels.
      * @param {string} letter
      * @returns {number} number of found letters
      */
