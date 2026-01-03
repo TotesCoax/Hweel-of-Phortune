@@ -1,10 +1,8 @@
 console.log('File Loaded')
 
-import { GameCommunication } from "./classes/GameCommunication.js"
+import { EventCode } from "./classes/EventCode.js"
 
-let test = new GameCommunication('Yay')
-
-console.log(test.data)
+console.log(EventCode)
 
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 

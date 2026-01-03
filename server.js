@@ -1,6 +1,6 @@
 const {LocallyConnectedServer} = require('./classes/LocallyConnectedServer')
 const {v4: makeID} = require('uuid')
-const {EventCode} = require('./client/classes/EventCode')
+const {EventCode} = require('./classes/EventCode')
 
 const GameServer = new LocallyConnectedServer('client')
 
