@@ -1,57 +1,76 @@
 const {LocallyConnectedServer} = require('./classes/LocallyConnectedServer')
 const {v4: makeID} = require('uuid')
+const {EventCode} = require('./client/classes/EventCode')
 
 const GameServer = new LocallyConnectedServer('client')
 
 // Socket IO Server Stuff
-GameServer.io.on('connection', (player) => {
-    console.log("It appears we have a visitor. Put on the tea.", player.id)
-    player.on('playerJoin', (id, callback) =>{
+GameServer.io.on(EventCode.connection, (socket) => {
+    console.log("It appears we have a visitor. Put on the tea.", socket.id)
+    socket.on(EventCode.disconnect, (reason) => {
+        // player.leave('players')
+        console.log(`${socket.id} disconnected. Reason: ${reason}`)
+    })
+    // Board Events
+    // The Board connects to the server
+    socket.on(EventCode.boardJoin, (id, callback) =>{
+        // The Board gets assigned to a room for the board only.
+        socket.join('board')
+        console.log(`Board joined board room`)
+        // Confirm with the board that it has been assigned the room.
+        callback('Room joined')
+    })
+    // The Board requests a gamestate, usually after a refresh or disconnect event.
+    socket.on(EventCode.gamestateRequest, (id, callback) => {
+        console.log(`Board request from: ${id}`)
+        // The server sends a copy of the game state to the board.
+        callback(WOF)
+    })
+    // Direct to player message
+    socket.on('yourTurn', (idFromHandler) => {
+        socket.to(idFromHandler).emit('yourTurn', "You're up, dingus.")
+    })
+
+    // Player Events
+    // A Player connects to the server
+    socket.on(EventCode.playerJoin, (id, callback) =>{
         console.log('Player Join: ', id)
-        if (!WOF.PlayerHandler.isPlayerExists()){
+        if (!WOF.PlayerHandler.isPlayerExists(id)){
+            // If the player does not exist in the player list, aka truly new player, create a new ID for them, add it to the list, and return the ID to the client for identity storage.
             console.log(`Creating new player.`)
             let newPlayerID = makeID()
             WOF.PlayerHandler.addPlayer(newPlayerID)
-            console.table(WOF.PlayerHandler.players)
             callback(WOF.PlayerHandler.getPlayer(newPlayerID))
         } else {
+            // If the player exists, send them their player ID to confirm connection.
             console.log(WOF.PlayerHandler.getPlayer(id))
-            console.table(WOF.PlayerHandler.players)
             callback(WOF.PlayerHandler.getPlayer(id))
         }
-        player.join('players')
+        // Add them to the players channel
+        socket.join('players')
+        console.table(WOF.PlayerHandler.players)
         console.log(`Player joined room`)
     })
-    player.on('boardJoin', (id, callback) =>{
-        player.join('board')
-        console.log(`Board joined board room`)
-        callback('Room joined')
-    })
-    player.on('gamestateRequest', (id, callback) => {
-        console.log(`Board request from: ${id}`)
-        callback(WOF)
-    })
-    player.on('disconnect', (reason) => {
-        player.leave('players')
-        console.log(`${player.id} disconnected. Reason: ${reason}`)
-    })
-    player.on('speedData', (data) => {
+    
+    // A player sends spin data to the server
+    socket.on(EventCode.speedData, (data) => {
         console.log(data)
+        // Check if the player is the active player, ignore all other submissions (let the players have freedom to fiddle with it)
         // if(WOF.PlayerHandler.isActivePlayer(data.id)){
             let spinPower = WOF.Wheel.spinWheel(data.value)
             console.log(spinPower)
             GameServer.io.to('board').emit('spinValue', spinPower)
         // }
     })
-    player.on('nameChange', (data) => {
+    socket.on(EventCode.nameChange, (data) => {
         console.log(data)
-        let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
+        let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setName(data.name)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
-    player.on('colorChange', (data) => {
+    socket.on(EventCode.colorChange, (data) => {
         console.log(data)
-        let player = WOF.PlayerHandler.players[WOF.PlayerHandler.findPlayer(data.id)]
+        let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setColor(data.color)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
