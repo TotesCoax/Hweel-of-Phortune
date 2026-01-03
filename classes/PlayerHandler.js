@@ -30,10 +30,19 @@ class PlayerHandler{
         }
         this.turnIndicator--
     }
-    currentPlayer(){
+    getCurrentPlayer(){
         return this.players[this.turnIndicator]
     }
-    nextPlayer(){
+    setCurrentPlayer(id){
+        this.turnIndicator = this.getPlayerIndex(id)
+    }
+    movePlayerInTurnOrder(){
+        //Not Implemented yet, but I think it would be fun to have a wheel space move players around in turn order. Either to specific spots or +/- number of spaces
+    }
+    swapPlayersInTurnOrder(){
+        // Not Implemented yet, but sounds like a fun thing to add
+    }
+    getNextPlayer(){
         if(!this.players[this.turnIndicator+1]){
             return this.players[0]
         }
@@ -69,6 +78,33 @@ class PlayerHandler{
     }
     getPlayer(playerId){
         return this.players[this.getPlayerIndex(playerId)]
+    }
+    getPlayersSortedByScore(){
+        return this.players.toSorted((a, b) => a.score - b.score)
+    }
+    /**
+     * 
+     * @param {number} numPlayers Number of players you want returned from top
+     */
+    getTopPlayers(numPlayers){
+        let sorted = this.getPlayersSortedByScore(),
+            players = []
+        for (let index = 0; players.length < numPlayers; index++) {
+            players.push(sorted[index])
+        }
+        return players
+    }
+    /**
+     * 
+     * @param {number} numPlayers Number of players you want returned from top
+     */
+    getBottomPlayers(numPlayers){
+        let sorted = this.getPlayersSortedByScore(),
+            players = []
+        for (let index = sorted.length - 1; players.length < numPlayers; index--) {
+            players.push(sorted[index])
+        }
+        return players
     }
 }
 
