@@ -4,11 +4,12 @@ class Player{
      * 
      * @param {number} id unique ID for the player 
      */
-    constructor(id){
-        this.id = id
-        this.name = ''
+    constructor(gameID, socketID){
+        this.gameID = gameID
+        this.name = 'BUGS'
         this.score = 0
-        this.color = ''
+        this.color = 'FFF'
+        this.socketID = socketID
     }
     /**
      * Increments the score for player.
