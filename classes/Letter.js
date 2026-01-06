@@ -1,38 +1,55 @@
 class Letter{
-    constructor(){
+    constructor(char){
         this.character = ''
         this.revealed = false
         this.isVowel = false
         this.isLetter = false
         this.isPunc = false
         this.isSpace = false
-    }
-    checkVowel(){
-        return 'aeiou'.toUpperCase().split('').findIndex(letter => letter === this.character) >= 0
-    }
-    checkLetter(){
-        return 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('').findIndex(letter => letter === this.character) >= 0
-    }
-    checkPunc(){
-                return '.,\'\"?!&'.toUpperCase().split('').findIndex(letter => letter === this.character) >= 0
+        this.processCharacter(char)
     }
     /**
      * 
      * @param {string} char 
      */
-    setCharacter(char){
+    processCharacter(char){
         if(char.length != 1){
-            throw 'only single characters allowed for letter spaces'
+            console.log("only single characters allowed for letter spaces")
         }
         this.character = char.toUpperCase()
-        this.isVowel = this.checkVowel()
-        this.isLetter = this.checkLetter()
+        this.isLetter = this.setLetter()
+        this.isVowel = this.setVowel()
+        this.isPunc = this.setPunc()
         if(this.isPunc){
             this.revealed = true
         }
         if(this.isLetter || this.isPunc){
             this.isSpace = true
         }
+    }
+    /**
+     * 
+     * @param {string} char 
+     * @returns {boolean}
+     */
+    setVowel(char){
+        return 'AEIOU'.includes(this.character)
+    }
+    /**
+     * 
+     * @param {string} char 
+     * @returns {boolean}
+     */
+    setLetter(char){
+        return 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().includes(this.character)
+    }
+    /**
+     * 
+     * @param {string} char 
+     * @returns {boolean}
+     */
+    setPunc(char){
+        return '.,\'\"?!&'.toUpperCase().includes(this.character)
     }
     revealLetter(){
         this.revealed = true
