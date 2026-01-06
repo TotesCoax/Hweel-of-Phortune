@@ -1,7 +1,9 @@
 const {Board} = require('./Board')
 const {Wheel} = require('./Wheel')
 const {PlayerHandler} = require('./PlayerHandler')
-const { create } = require('qrcode')
+const {Letter} = require('./Letter')
+const { Player } = require('./Player')
+// const { create } = require('qrcode')
 
 
 class WOFGame{
@@ -19,6 +21,8 @@ class WOFGame{
         this.isWaitingForSpin = false
         this.isWaitingForGuess = false
     }
+
+    // Setup Functions
     /**
      * 
      * @param {string} clue 
@@ -36,6 +40,74 @@ class WOFGame{
         this.Wheel.shuffleSections()
     }
 
+    // Utility functions
+    /**
+     * 
+     * @param {string} letter 
+     * @returns {Letter}
+     */
+    parseGuess(char){
+        return new Letter(char)
+    }
+
+
+
+    // Gameplay functions
+
+    playerGuess(guess, playerID){
+        let result = this.handleGuess(guess, playerID)
+        if(!result){
+            this.PlayerHandler.advanceTurn()
+        }
+        return this.PlayerHandler.getCurrentPlayer()
+    }
+
+    /**
+     * 
+     * @param {string} guess 
+     * @param {Player} player 
+     * @returns {boolean} true if successful, false if not
+     */
+    handleGuess(guess, playerID){
+        let letter = new Letter(guess),
+            player = this.PlayerHandler.getPlayer(playerID)
+        if (letter.isVowel){
+            return this.handleVowel(letter, player)
+        }
+        if (letter.isLetter){
+            return this.handleConsonant(letter, player)
+        }
+    }
+    /**
+     * 
+     * @param {Letter} letter 
+     * @param {Player} player 
+     */
+    handleConsonant(letter, player){
+        let wheelValue = this.Wheel.getWheelValue(),
+            guessResult = this.Board.handleGuess(letter.character)
+
+        if (guessResult == 0){
+            return false
+        }
+        player.score += (wheelValue * guessResult)
+        return true
+    }
+
+    /**
+     * 
+     * @param {Letter} letter 
+     * @param {Player} player 
+     */
+    handleVowel(letter, player){
+        let guessResult = this.Board.handleGuess(letter)
+
+        if (guessResult == 0){
+            return false
+        }
+        player.score -= 250
+        return true
+    }
 
 }
 
