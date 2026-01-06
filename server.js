@@ -39,12 +39,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
             // If the player does not exist in the player list, aka truly new player, create a new ID for them, add it to the list, and return the ID to the client for identity storage.
             console.log(`Creating new player.`)
             let newPlayerID = makeID()
-            WOF.PlayerHandler.addPlayer(newPlayerID)
-            callback(WOF.PlayerHandler.getPlayer(newPlayerID))
+            WOF.PlayerHandler.addPlayer(newPlayerID, socket.id)
+            callback(WOF.PlayerHandler.getPlayer(newPlayerID).gameID)
         } else {
             // If the player exists, send them their player ID to confirm connection.
             console.log(WOF.PlayerHandler.getPlayer(id))
-            callback(WOF.PlayerHandler.getPlayer(id))
+            callback(WOF.PlayerHandler.getPlayer(id).socketID)
         }
         // Add them to the players channel
         socket.join('players')
@@ -74,6 +74,8 @@ GameServer.io.on(EventCode.connection, (socket) => {
         player.setColor(data.color)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
+    // Game Actions
+    
 })
 
 
