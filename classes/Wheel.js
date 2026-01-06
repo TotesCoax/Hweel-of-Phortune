@@ -62,7 +62,7 @@ class Wheel{
         this.resetCurrentDeg()
         return rotation
     }
-    readWheel(){
+    getWheelValue(){
         let reading = this.sections[Math.floor(this.currentDeg/this.sectionWidthInDeg)]
         // console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
         return reading
