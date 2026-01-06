@@ -22,7 +22,7 @@ class Board{
      */
     tooManyChars(){
         if(this.phrase > this.maxChar){
-            throw 'This phrase is too large to fit the board.'
+            console.log("This phrase is too large to fit the board.")
         }
     }
     /**
@@ -42,7 +42,8 @@ class Board{
         for (let index = 0; index < this.rowCount; index++) {
             let col = []
             for (let index = 0; index < this.colCount; index++) {
-                col.push(new Letter('#'))                
+                let blankSpace = new Letter("#")
+                col.push(blankSpace)                
             }
             board.push(col)            
         }
@@ -85,7 +86,7 @@ class Board{
     assignLettersToRow(rowFromBoard, parsedRow){
         let index = this.findStartingSpot(parsedRow)
         for (let letter of parsedRow) {
-            rowFromBoard[index].setCharacter(letter)
+            rowFromBoard[index] = new Letter(letter)
             index++
         }
     }
@@ -127,7 +128,7 @@ class Board{
     handleGuess(letter){
         let guessLetter = letter.toUpperCase()
         if(this.letterAlreadyGuessed(guessLetter)){
-            throw 'Letter already guessed.'
+            console.log("Letter already guessed.")
         }
         this.guessedLetters.push(guessLetter)
         let numFoundLetters = 0
