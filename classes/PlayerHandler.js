@@ -52,17 +52,19 @@ class PlayerHandler{
      * Adds a new player class to the array and returns their game ID, to be sent to client for saving.
      * @returns {string} uuid for game session
      */
-    addPlayer(id){
+    addPlayer(gameID, socketID){
         if (this.isPlayerExists){
-            throw 'Player already exists.'
+            console.log("Player already exists.")
+            return
         }
-        let newPlayer = new Player(id)
+        let newPlayer = new Player(gameID, socketID)
         this.players.push(newPlayer)
         return newPlayer.id
     }
     removePlayer(id){
         if (!this.isPlayerExists){
-            throw 'No player found'
+            console.log("No player found.")
+            return
         }
         let removedPlayer = this.players.splice(this.findPlayer(id))
         return removedPlayer
@@ -74,7 +76,7 @@ class PlayerHandler{
         return this.getPlayerIndex(id) == this.turnIndicator
     }
     getPlayerIndex(playerId){
-        return this.players.findIndex(seat => seat.id === playerId)
+        return this.players.findIndex(seat => seat.gameID === playerId)
     }
     getPlayer(playerId){
         return this.players[this.getPlayerIndex(playerId)]
