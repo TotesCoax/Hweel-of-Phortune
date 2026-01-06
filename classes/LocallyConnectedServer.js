@@ -36,9 +36,13 @@ class LocallyConnectedServer{
         DNS.lookup(OS.hostname(),{family: 4}, function(err, add, fam){
             console.log('The server is on.', `http://${add}:${port}/board`)
             QRCode.toFile(`./${pathToStaticFolder}/qrcode.png`, `http://${add}:${port}/${routeToServer}`, {type: 'png'}, function (err) {
-                if (err) throw err
-                console.log('QR Code Created', `./${pathToStaticFolder}/qrcode.png`)
-                return `./${pathToStaticFolder}/qrcode.png`
+                try {
+                    if (err) throw err
+                    console.log('QR Code Created', `./${pathToStaticFolder}/qrcode.png`)
+                    return `./${pathToStaticFolder}/qrcode.png`                    
+                } catch (error) {
+                    console.log(error)
+                }
             })
         })
 
