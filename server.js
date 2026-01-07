@@ -24,7 +24,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on(EventCode.gamestateRequest, (id, callback) => {
         console.log(`Board request from: ${id}`)
         // The server sends a copy of the game state to the board.
-        callback(WOF)
+        callback(WOF.getGamestate())
     })
     // Direct to player message
     socket.on('yourTurn', (idFromHandler) => {
@@ -96,15 +96,25 @@ GameServer.server.listen(3000, () => {
 
 const {WOFGame} = require('./classes/WOFGame')
 const { Player } = require('./classes/Player')
+const { Wheel } = require('./classes/Wheel')
+const { PlayerHandler } = require('./classes/PlayerHandler')
 
 const WOF = new WOFGame()
 
-WOF.Wheel.generateSections(1000)
+// WOF.Wheel.generateSections(1000)
 
-WOF.Board.handleGuess('e')
+// WOF.Board.handleGuess('e')
+
+WOF.playerGuess('r', 'aaaa')
+WOF.playerGuess('s', 'bbbb')
+WOF.playerGuess('t', 'cccc')
+WOF.playerGuess('l', 'aaaa')
+WOF.playerGuess('n', 'bbbb')
+WOF.playerGuess('e', 'cccc')
 
 // WOF.Board.board.forEach(row => {
 //     console.table(row)
 // })
+
 
 // console.log(WOF)
