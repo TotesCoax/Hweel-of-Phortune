@@ -4,9 +4,9 @@ class Player{
      * 
      * @param {number} id unique ID for the player 
      */
-    constructor(gameID, socketID){
+    constructor(gameID, socketID, defaultName){
         this.gameID = gameID
-        this.name = 'BUGS'
+        this.name = defaultName
         this.score = 0
         this.color = 'FFF'
         this.socketID = socketID
