@@ -15,6 +15,7 @@ class Letter{
     processCharacter(char){
         if(char.length != 1){
             console.log("only single characters allowed for letter spaces")
+            return
         }
         this.character = char.toUpperCase()
         this.isLetter = this.setLetter()
