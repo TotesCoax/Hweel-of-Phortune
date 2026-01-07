@@ -21,6 +21,7 @@ socket.on('connect', () => {
         renderClue(res.Board.clue)
         renderGuessedLetters(res.Board.guessedLetters)
         renderWheel(res.Wheel.sections)
+        renderScores(res.Players)
       })
     })
 })
@@ -112,6 +113,49 @@ function renderGuessedLetters(arrayOfChar){
         p.innerText = letter
         usedLettersContainer.append(p)
     })
+}
+
+/**
+ * @typedef {object} Player
+ * @property {string} gameID
+ * @property {string} name
+ * @property {number} score
+ * @property {string} color
+ */
+
+/**
+ * @param {Player[]} playersArray 
+ */
+function renderScores(playersArray){
+    let playerContainer = document.querySelector("#playerContainer")
+    clearChildren(playerContainer)
+    playersArray.forEach(player => {
+        let playerTile = createPlayerTile(player.name, player.score, player.color)
+        playerContainer.append(playerTile)
+    })
+}
+
+function createPlayerTile(playerName, playerScore, playerColor){
+    let containerEl = document.createElement('div'),
+        nameEl = document.createElement('p'),
+        scoreEl = document.createElement('p')
+
+        containerEl.classList.add('player-tile')
+        nameEl.classList.add('player-name')
+        scoreEl.classList.add('player-score')
+
+        containerEl.style.backgroundColor = playerColor
+        nameEl.innerText = playerName
+        scoreEl.innerText = playerScore
+        
+        if (getBrightness(playerColor) < 127){
+            nameEl.style.color = "white"
+            scoreEl.style.color = "white"
+        }
+
+        containerEl.append(nameEl, scoreEl)
+
+        return containerEl
 }
 
 // Wheel Stuff
