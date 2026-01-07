@@ -3,7 +3,6 @@ const {Wheel} = require('./Wheel')
 const {PlayerHandler} = require('./PlayerHandler')
 const {Letter} = require('./Letter')
 const { Player } = require('./Player')
-// const { create } = require('qrcode')
 
 
 class WOFGame{
@@ -20,6 +19,7 @@ class WOFGame{
         this.PlayerHandler = new PlayerHandler(players)
         this.isWaitingForSpin = false
         this.isWaitingForGuess = false
+        this.createTestEnvironment()
     }
 
     // Setup Functions
@@ -72,11 +72,14 @@ class WOFGame{
         let letter = new Letter(guess),
             player = this.PlayerHandler.getPlayer(playerID)
         if (letter.isVowel){
+            console.log('Vowel found')
             return this.handleVowel(letter, player)
         }
         if (letter.isLetter){
+            console.log('Consonant found')
             return this.handleConsonant(letter, player)
         }
+        return false
     }
     /**
      * 
@@ -89,8 +92,10 @@ class WOFGame{
 
         if (guessResult == 0){
             return false
-        }
+        }        
+        console.log(player.score)
         player.score += (wheelValue * guessResult)
+        console.table(this.PlayerHandler.players)
         return true
     }
 
@@ -100,13 +105,39 @@ class WOFGame{
      * @param {Player} player 
      */
     handleVowel(letter, player){
-        let guessResult = this.Board.handleGuess(letter)
+        if (player.score < 250){
+            return false
+        }
+
+        let guessResult = this.Board.handleGuess(letter.character)
 
         if (guessResult == 0){
             return false
         }
+        console.log(player.score)
         player.score -= 250
+        console.table(this.PlayerHandler.players)
         return true
+    }
+
+    /**
+     * 
+     * @returns {object}
+     */
+    getGamestate(){
+        return {
+            Board: this.Board,
+            Wheel: this.Wheel,
+            Players: this.PlayerHandler
+        }
+    }
+
+    createTestEnvironment(){
+        console.log('Creating Test players')
+        this.PlayerHandler.addPlayer('aaaa', '1111')
+        this.PlayerHandler.addPlayer('bbbb', '2222')
+        this.PlayerHandler.addPlayer('cccc', '3333')
+        console.table(this.PlayerHandler.players)
     }
 
 }
