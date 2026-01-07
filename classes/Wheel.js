@@ -25,6 +25,12 @@ class Wheel{
         this.shuffleSections()
         this.sectionWidthInDeg = 360 / this.sections.length
     }
+    /**
+     * Generates random values for the board. For right now I don't care much for distribution balance of scores.
+     * @param {number} min integer
+     * @param {number} max integer
+     * @returns {number} random number with two zeroes added.
+     */
     getRandomValue(min, max){
         return (Math.floor(Math.random() * (max - min + 1)) + min) * 100
     }
