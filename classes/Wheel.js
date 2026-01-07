@@ -6,13 +6,14 @@ class Wheel{
         this.minValue = 3
         this.maxValue = 9
         this.speedPowerFactor = 14 //7.2 is roughly the factor to get a 50 power spin to go 360 degrees, if i did the math correct (360/50)
+        this.generateSections()
     }
     /**
      * 
      * @param {number} bonusValue the one big bonus space value, it increases each round in the game.
      * @param {number} numberOfSections number of sections in the wheel, defaults to 24
      */
-    generateSections(bonusValue, numberOfSections = 24){
+    generateSections(bonusValue = 1000, numberOfSections = 24){
         let sectionValues = [],
             specialSpaces = 4,
             requiredNumbers = numberOfSections - specialSpaces
@@ -62,10 +63,14 @@ class Wheel{
         this.resetCurrentDeg()
         return rotation
     }
+    /**
+     * 
+     * @returns {number} returns 0 if it's not a scoring space, just in case.
+     */
     getWheelValue(){
         let reading = this.sections[Math.floor(this.currentDeg/this.sectionWidthInDeg)]
         // console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
-        return reading
+        return !Number.isNaN(reading)? reading : 0
     }
 }
 
