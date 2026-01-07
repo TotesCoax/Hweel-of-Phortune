@@ -52,12 +52,12 @@ class PlayerHandler{
      * Adds a new player class to the array and returns their game ID, to be sent to client for saving.
      * @returns {string} uuid for game session
      */
-    addPlayer(gameID, socketID){
+    addPlayer(gameID, socketID, playerName){
         if (this.isPlayerExists(gameID)){
             console.log("Player already exists.")
             return
         }
-        let newPlayer = new Player(gameID, socketID)
+        let newPlayer = new Player(gameID, socketID, playerName)
         this.players.push(newPlayer)
         return newPlayer.id
     }
