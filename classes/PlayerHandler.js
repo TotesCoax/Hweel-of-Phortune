@@ -53,7 +53,7 @@ class PlayerHandler{
      * @returns {string} uuid for game session
      */
     addPlayer(gameID, socketID){
-        if (this.isPlayerExists){
+        if (this.isPlayerExists(gameID)){
             console.log("Player already exists.")
             return
         }
@@ -62,7 +62,7 @@ class PlayerHandler{
         return newPlayer.id
     }
     removePlayer(id){
-        if (!this.isPlayerExists){
+        if (!this.isPlayerExists(gameID)){
             console.log("No player found.")
             return
         }
