@@ -42,7 +42,7 @@ class Board{
         for (let index = 0; index < this.rowCount; index++) {
             let col = []
             for (let index = 0; index < this.colCount; index++) {
-                let blankSpace = new Letter("#")
+                let blankSpace = new Letter(" ")
                 col.push(blankSpace)                
             }
             board.push(col)            
