@@ -58,7 +58,7 @@ class Board{
             rack = '',
             rows = []
         for (let i = 0; i < words.length; i++) {
-            // check if next work would break past column count. if yes push to return array and reset otherwise continue
+            // check if next word would break past column count. if yes push to return array and reset otherwise continue
             if(rack.length + words[i].length > this.colCount){
                 rows.push(rack)
                 rack = ''
