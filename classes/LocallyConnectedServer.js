@@ -34,7 +34,7 @@ class LocallyConnectedServer{
      */
     generateQRCodeForServer(port, routeToServer, pathToStaticFolder = this.path){
         DNS.lookup(OS.hostname(),{family: 4}, function(err, add, fam){
-            console.log('The server is on.', `http://${add}:${port}/board`)
+            console.log('The server is on.', `http://${add}:${port}/board`, `http://${add}:${port}/player`)
             QRCode.toFile(`./${pathToStaticFolder}/qrcode.png`, `http://${add}:${port}/${routeToServer}`, {type: 'png'}, function (err) {
                 try {
                     if (err) throw err
