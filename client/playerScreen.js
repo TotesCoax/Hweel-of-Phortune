@@ -2,16 +2,18 @@ console.log('File Loaded')
 
 /**
  * @typedef {object} PlayerInfo
- * @property {string} id - id from the server
+ * @property {string} gameID - id from the server
  * @property {string} name - user selected name
  * @property {number} score - score for the game
  * @property {string} color - hex code of player color
+ * @property {string} socketID - id of the socket
  */
 let playerInfo = {
-  id: 'new',
-  name: '',
-  score: '',
-  color: ''
+  gameID: 'new',
+  name: 'Bugs',
+  score: '0',
+  color: '#fff',
+  socketID: ''
 }
 
 function updateLocalStorage(){
@@ -32,7 +34,8 @@ const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
     console.log(socket.id)
-    let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().id : ''
+    let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().gameID : 'Nothing'
+    console.log(playerID)
     socket.emit('playerJoin', playerID, (res) => {
       console.log(res)
       playerInfo = res
@@ -134,10 +137,10 @@ menuDisplay.addEventListener('click', (event) => {
 })
 
 nameInput.addEventListener('input', () => {
-  socket.emit('nameChange', {id: playerInfo.id, name: nameInput.value})
+  socket.emit('nameChange', {id: playerInfo.gameID, name: nameInput.value})
 })
 
 colorInput.addEventListener('input', () => {
-  socket.emit('colorChange', {id: playerInfo.id, color: colorInput.value})
+  socket.emit('colorChange', {id: playerInfo.gameID, color: colorInput.value})
 })
 

@@ -39,12 +39,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
             // If the player does not exist in the player list, aka truly new player, create a new ID for them, add it to the list, and return the ID to the client for identity storage.
             console.log(`Creating new player.`)
             let newPlayerID = makeID()
-            WOF.PlayerHandler.addPlayer(newPlayerID, socket.id)
-            callback(WOF.PlayerHandler.getPlayer(newPlayerID).gameID)
+            WOF.PlayerHandler.addPlayer(newPlayerID, socket.id, '')
+            callback(WOF.PlayerHandler.getPlayer(newPlayerID))
         } else {
             // If the player exists, send them their player ID to confirm connection.
             console.log(WOF.PlayerHandler.getPlayer(id))
-            callback(WOF.PlayerHandler.getPlayer(id).socketID)
+            callback(WOF.PlayerHandler.getPlayer(id))
         }
         // Add them to the players channel
         socket.join('players')
@@ -63,13 +63,11 @@ GameServer.io.on(EventCode.connection, (socket) => {
         // }
     })
     socket.on(EventCode.nameChange, (data) => {
-        console.log(data)
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setName(data.name)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
     })
     socket.on(EventCode.colorChange, (data) => {
-        console.log(data)
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setColor(data.color)
         GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
@@ -95,9 +93,9 @@ GameServer.server.listen(3000, () => {
 })
 
 const {WOFGame} = require('./classes/WOFGame')
-const { Player } = require('./classes/Player')
-const { Wheel } = require('./classes/Wheel')
-const { PlayerHandler } = require('./classes/PlayerHandler')
+// const { Player } = require('./classes/Player')
+// const { Wheel } = require('./classes/Wheel')
+// const { PlayerHandler } = require('./classes/PlayerHandler')
 
 const WOF = new WOFGame()
 
