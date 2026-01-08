@@ -1,4 +1,4 @@
-class Wheel{
+export class Wheel{
     constructor(sections = []){
         this.sections = sections
         this.sectionWidthInDeg = 0
@@ -80,4 +80,4 @@ class Wheel{
     }
 }
 
-module.exports = { Wheel }
+// module.exports = { Wheel }

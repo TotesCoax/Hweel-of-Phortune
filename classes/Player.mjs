@@ -1,5 +1,5 @@
 
-class Player{
+export class Player{
     /**
      * 
      * @param {number} id unique ID for the player 
@@ -41,4 +41,4 @@ class Player{
     }
 }
 
-module.exports = { Player }
+// module.exports = { Player }

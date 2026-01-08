@@ -1,4 +1,4 @@
-const EventCode = Object.freeze({
+export const EventCode = Object.freeze({
     //General Codes
     connection: "connection",
     disconnect: "disconnect",
@@ -13,4 +13,4 @@ const EventCode = Object.freeze({
     letterSubmission: "letterSubmission"
 })
 
-module.exports = { EventCode }
+// module.exports = { EventCode }

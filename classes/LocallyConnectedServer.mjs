@@ -2,19 +2,24 @@
 
 
 // Socket IO Stuff
-const express = require('express')
+import express from 'express'
 
-const http = require('http')
-const { Server } = require("socket.io")
+import http from 'http'
+import {Server} from 'socket.io'
+// const http = require('http')
+// const { Server } = require("socket.io")
 
 //Utilities for Connection related stuff
-const DNS = require('dns')
-const OS = require('os')
+// const DNS = require('dns')
+// const OS = require('os')
+import DNS from 'dns'
+import OS from 'os'
 
 // QRCode Stuff
-const QRCode = require('qrcode')
+// const QRCode = require('qrcode')
+import QRCode from 'qrcode'
 
-class LocallyConnectedServer{
+export class LocallyConnectedServer{
     /**
      * 
      * @param {string} path File path to public/static files folder.
@@ -72,4 +77,3 @@ App.server.listen(3000, () => {
     App.generateQRCodeForServer(addressInfo.port)
 })
 */
-module.exports = { LocallyConnectedServer }

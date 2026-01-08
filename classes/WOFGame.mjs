@@ -1,11 +1,16 @@
-const {Board} = require('./Board')
-const {Wheel} = require('./Wheel')
-const {PlayerHandler} = require('./PlayerHandler')
-const {Letter} = require('./Letter')
-const { Player } = require('./Player')
+// const {Board} = require('./Board.mjs')
+// const {Wheel} = require('./Wheel.mjs')
+// const {PlayerHandler} = require('./PlayerHandler.mjs')
+// const {Letter} = require('./Letter.mjs')
+// const { Player } = require('./Player.mjs')
 
+import { Board } from './Board.mjs'
+import { Wheel } from './Wheel.mjs'
+import { PlayerHandler } from './PlayerHandler.mjs'
+import { Letter } from './Letter.mjs'
+import { Player } from './Player.mjs'
 
-class WOFGame{
+export class WOFGame{
     /**
      * If no values are provided it makes a default game. Otherwise you can supply values to create a game from a previous game state.
      * @param {string} clue Clue for the puzzle
@@ -155,4 +160,4 @@ class WOFGame{
 
 }
 
-module.exports = { WOFGame }
+// module.exports = { WOFGame }

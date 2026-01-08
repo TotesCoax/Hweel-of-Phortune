@@ -1,6 +1,7 @@
-const {Letter} = require('./Letter')
+// const {Letter} = require('./Letter.mjs')
+import { Letter } from './Letter.mjs'
 
-class Board{
+export class Board{
     /**
      * @param {string} clue Clue to display to players
      * @param {string} phrase The Phrase the players need to solve
@@ -153,4 +154,4 @@ class Board{
     }
 }
 
-module.exports = { Board }
+// module.exports = { Board }

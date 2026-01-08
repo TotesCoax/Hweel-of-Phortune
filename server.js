@@ -1,6 +1,12 @@
-const {LocallyConnectedServer} = require('./classes/LocallyConnectedServer')
-const {v4: makeID} = require('uuid')
-const {EventCode} = require('./classes/EventCode')
+import { LocallyConnectedServer } from './classes/LocallyConnectedServer.mjs'
+import {v4 as makeID} from 'uuid'
+import { EventCode } from './classes/EventCode.mjs'
+// const {v4: makeID} = require('uuid')
+// const {EventCode} = require('./classes/EventCode')
+
+// Game imports
+// const {WOFGame} = require('./classes/WOFGame')
+import { WOFGame } from './classes/WOFGame.mjs'
 
 const GameServer = new LocallyConnectedServer('client')
 
@@ -92,10 +98,6 @@ GameServer.server.listen(3000, () => {
     GameServer.generateQRCodeForServer(addressInfo.port, 'player')
 })
 
-const {WOFGame} = require('./classes/WOFGame')
-// const { Player } = require('./classes/Player')
-// const { Wheel } = require('./classes/Wheel')
-// const { PlayerHandler } = require('./classes/PlayerHandler')
 
 const WOF = new WOFGame()
 

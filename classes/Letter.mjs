@@ -1,4 +1,4 @@
-class Letter{
+export class Letter{
     constructor(char){
         this.character = ''
         this.revealed = false
@@ -57,4 +57,4 @@ class Letter{
     }
 }
 
-module.exports = { Letter }
+// module.exports = { Letter }

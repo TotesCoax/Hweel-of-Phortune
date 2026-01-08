@@ -1,6 +1,7 @@
-const {Player} = require("./Player")
+// const {Player} = require("./Player.mjs")
+import { Player } from "./Player.mjs"
 
-class PlayerHandler{
+export class PlayerHandler{
     /**
      * @param {Player[]} players - an array of Player objects
      */
@@ -110,4 +111,4 @@ class PlayerHandler{
     }
 }
 
-module.exports = { PlayerHandler }
+// module.exports = { PlayerHandler }
