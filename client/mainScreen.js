@@ -11,31 +11,34 @@ socket.on('connect', () => {
     console.log(`Socket Id: ${socket.id}`)
     socket.emit('boardJoin', socket.id, (res) => {
       console.log(`Data from server: ${res}`)
-      if (gamestate){
-        return
-      }
       socket.emit('gamestateRequest', socket.id, (res)=> {
         console.log(res)
-        gamestate = true
         renderBoard(res.Board.board)
         renderClue(res.Board.clue)
         renderGuessedLetters(res.Board.guessedLetters)
         renderWheel(res.Wheel.sections)
-        renderScores(res.Players)
+        renderPlayerTiles(res.Players)
       })
     })
 })
 
 socket.on('playerUpdate', (data) => {
     // Eventually re-render player board
-    console.log(`Data from Server: ${data}`)
+    socket.emit('gamestateRequest', socket.id, (res)=> {
+        console.log(res)
+        renderBoard(res.Board.board)
+        renderClue(res.Board.clue)
+        renderGuessedLetters(res.Board.guessedLetters)
+        renderWheel(res.Wheel.sections)
+        renderPlayerTiles(res.Players)
+    })
 })
+
 
 // socket.on('boardUpdate', boardUpdate)
 
 // Board stuff
 
-let gamestate = false
 
 function generateTestBoard(){
     let board = [new Array(12).fill("1"), new Array(12).fill("2"), new Array(12).fill("3"), new Array(12).fill("4")]
@@ -48,7 +51,7 @@ function generateTestBoard(){
  */
 function clearChildren(element){
     while (element.firstChild){
-        element.remove(element.lastChild)
+        element.lastChild.remove()
     }
 }
 
@@ -73,18 +76,25 @@ function renderBoard(arrayByLetter){
         for (const col of row) {
             let letter = document.createElement("p"),
                 holder = document.createElement('div')
-            letter.innerText = col.character
-            switch (true) {
-                case col.revealed:
-                    letter.classList.add('revealed')
-                case col.isSpace:
-                    letter.classList.add('game-space')
-                default:
-                    letter.classList.add('processed')
-                    break;
+            if (col.isSpace){
+                holder.classList.add('game-space')               
             }
+            letter.innerText = col.character
+            if (col.revealed){
+                letter.classList.add('revealed')
+            }
+            letter.classList.add('processed')
+            // switch (true) {
+            //     case col.revealed:
+            //         letter.classList.add('revealed')
+            //     case col.isSpace:
+            //         letter.classList.add('game-space')
+            //     default:
+            //         letter.classList.add('processed')
+            //         break;
+            // }
             holder.append(letter)
-            mainBoard.append(letter)
+            mainBoard.append(holder)
         }
     }
 }
@@ -121,21 +131,27 @@ function renderGuessedLetters(arrayOfChar){
  * @property {string} name
  * @property {number} score
  * @property {string} color
+ * @property {boolean} isConnected
  */
 
 /**
  * @param {Player[]} playersArray 
  */
-function renderScores(playersArray){
+function renderPlayerTiles(playersArray){
     let playerContainer = document.querySelector("#playerContainer")
     clearChildren(playerContainer)
     playersArray.forEach(player => {
-        let playerTile = createPlayerTile(player.name, player.score, player.color)
+        let playerTile = createPlayerTile(player)
         playerContainer.append(playerTile)
     })
 }
 
-function createPlayerTile(playerName, playerScore, playerColor){
+/**
+ * 
+ * @param {Player} playerData 
+ * @returns 
+ */
+function createPlayerTile(playerData){
     let containerEl = document.createElement('div'),
         nameEl = document.createElement('p'),
         scoreEl = document.createElement('p')
@@ -144,14 +160,20 @@ function createPlayerTile(playerName, playerScore, playerColor){
         nameEl.classList.add('player-name')
         scoreEl.classList.add('player-score')
 
-        containerEl.style.backgroundColor = playerColor
-        nameEl.innerText = playerName
-        scoreEl.innerText = playerScore
+        if (!playerData.isConnected){
+            containerEl.classList.add('disconnected')
+        }
+
+        containerEl.style.backgroundColor = playerData.color
+        nameEl.innerText = playerData.name
+        scoreEl.innerText = playerData.score
         
-        if (getBrightness(playerColor) < 127){
+        if (getBrightness(playerData.color) < 127){
             nameEl.style.color = "white"
             scoreEl.style.color = "white"
         }
+
+        
 
         containerEl.append(nameEl, scoreEl)
 
