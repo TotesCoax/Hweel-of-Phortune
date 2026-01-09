@@ -53,7 +53,7 @@ export class PlayerHandler{
      * Adds a new player class to the array and returns their game ID, to be sent to client for saving.
      * @returns {string} uuid for game session
      */
-    addPlayer(gameID, socketID, playerName){
+    addPlayer(gameID, socketID, playerName = `Player ${this.players.length + 1}`){
         if (this.isPlayerExists(gameID)){
             console.log("Player already exists.")
             return
@@ -71,13 +71,18 @@ export class PlayerHandler{
         return removedPlayer
     }
     isPlayerExists(id){
+        console.log('Checking if player exists.', this.getPlayerIndex(id))
         return this.getPlayerIndex(id) > 0
     }
     isActivePlayer(id){
         return this.getPlayerIndex(id) == this.turnIndicator
     }
     getPlayerIndex(playerId){
-        return this.players.findIndex(seat => seat.gameID === playerId)
+        let index = this.players.findIndex(seat => seat.gameID === playerId)
+        if (index < 0){
+            index = this.players.findIndex(seat => seat.socketID === playerId)
+        }
+        return index
     }
     getPlayer(playerId){
         return this.players[this.getPlayerIndex(playerId)]
