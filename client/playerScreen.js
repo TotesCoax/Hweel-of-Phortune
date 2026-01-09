@@ -13,7 +13,8 @@ let playerInfo = {
   name: 'Bugs',
   score: '0',
   color: '#fff',
-  socketID: ''
+  socketID: '',
+  isConnected: false
 }
 
 function updateLocalStorage(){
@@ -35,11 +36,13 @@ const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 socket.on("connect", () => {
     console.log(socket.id)
     let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().gameID : 'Nothing'
-    console.log(playerID)
+    console.log('Connected as: ', playerID)
     socket.emit('playerJoin', playerID, (res) => {
       console.log(res)
       playerInfo = res
+      updateInputFields(playerInfo)
       updateLocalStorage()
+      console.log('Handshake complete, local storage updated.')
     })
 })
 
@@ -137,6 +140,7 @@ menuDisplay.addEventListener('click', (event) => {
 })
 
 nameInput.addEventListener('input', () => {
+  console.log('Namechange triggred')
   socket.emit('nameChange', {id: playerInfo.gameID, name: nameInput.value})
 })
 
@@ -144,3 +148,21 @@ colorInput.addEventListener('input', () => {
   socket.emit('colorChange', {id: playerInfo.gameID, color: colorInput.value})
 })
 
+/**
+ * 
+ * @param {PlayerInfo} data 
+ */
+function updateInputFields(data){
+      updateElementValue(nameInput, data.name)
+      updateElementValue(colorInput, data.color)
+}
+
+/**
+ * 
+ * @param {HTMLElement} element 
+ * @param {string} value 
+ */
+function updateElementValue(element, value){
+  console.log(element, value)
+  element.value = value
+}
