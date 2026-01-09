@@ -1,8 +1,14 @@
 import { LocallyConnectedServer } from './classes/LocallyConnectedServer.mjs'
 import {v4 as makeID} from 'uuid'
-import { EventCode } from './classes/EventCode.mjs'
+import { EventCode } from './client/classes/EventCode.js'
 // const {v4: makeID} = require('uuid')
 // const {EventCode} = require('./classes/EventCode')
+
+import { fileURLToPath } from 'url'
+import path from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Game imports
 // const {WOFGame} = require('./classes/WOFGame')
@@ -15,6 +21,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
     console.log("It appears we have a visitor. Put on the tea.", socket.id)
     socket.on(EventCode.disconnect, (reason) => {
         // player.leave('players')
+        console.log(WOF.PlayerHandler.getPlayer(socket.id))
+        if (WOF.PlayerHandler.getPlayer(socket.id)){
+            WOF.PlayerHandler.getPlayer(socket.id).setConnectedStatus(false)
+            console.table(WOF.PlayerHandler.players)
+            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        }
         console.log(`${socket.id} disconnected. Reason: ${reason}`)
     })
     // Board Events
@@ -45,11 +57,14 @@ GameServer.io.on(EventCode.connection, (socket) => {
             // If the player does not exist in the player list, aka truly new player, create a new ID for them, add it to the list, and return the ID to the client for identity storage.
             console.log(`Creating new player.`)
             let newPlayerID = makeID()
-            WOF.PlayerHandler.addPlayer(newPlayerID, socket.id, '')
+            WOF.PlayerHandler.addPlayer(newPlayerID, socket.id)
+            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
             callback(WOF.PlayerHandler.getPlayer(newPlayerID))
         } else {
             // If the player exists, send them their player ID to confirm connection.
             console.log(WOF.PlayerHandler.getPlayer(id))
+            WOF.PlayerHandler.getPlayer(id).setConnectedStatus(true)
+            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
             callback(WOF.PlayerHandler.getPlayer(id))
         }
         // Add them to the players channel
@@ -71,12 +86,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on(EventCode.nameChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setName(data.name)
-        GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
     socket.on(EventCode.colorChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setColor(data.color)
-        GameServer.io.to('board').emit('playerUpdate', WOF.PlayerHandler.players)
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
     // Game Actions
     
