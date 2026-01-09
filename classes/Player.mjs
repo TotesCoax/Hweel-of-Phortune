@@ -8,8 +8,9 @@ export class Player{
         this.gameID = gameID
         this.name = defaultName
         this.score = 0
-        this.color = 'FFF'
+        this.color = '#FFF'
         this.socketID = socketID
+        this.isConnected = true
     }
     /**
      * Increments the score for player.
@@ -38,6 +39,9 @@ export class Player{
      */
     setName(string){
         this.name = string
+    }
+    setConnectedStatus(boolean){
+        this.isConnected = boolean
     }
 }
 
