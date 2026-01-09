@@ -139,22 +139,23 @@ export class WOFGame{
 
     createTestEnvironment(){
         console.log('Creating Test players')
-        this.PlayerHandler.addPlayer('aaaa', '1111', `Player ${this.PlayerHandler.players.length + 1}`)
-        this.PlayerHandler.addPlayer('bbbb', '2222', `Player ${this.PlayerHandler.players.length + 1}`)
-        this.PlayerHandler.addPlayer('cccc', '3333', `Player ${this.PlayerHandler.players.length + 1}`)
-        this.PlayerHandler.addPlayer('dddd', '4444', `Player ${this.PlayerHandler.players.length + 1}`)
-        this.PlayerHandler.addPlayer('eeee', '5555', `Player ${this.PlayerHandler.players.length + 1}`)
-        this.PlayerHandler.addPlayer('ffff', '6666', `Player ${this.PlayerHandler.players.length + 1}`)
+        this.PlayerHandler.addPlayer('aaaa', '1111')
+        this.PlayerHandler.addPlayer('bbbb', '2222')
+        this.PlayerHandler.addPlayer('cccc', '3333')
+        this.PlayerHandler.addPlayer('dddd', '4444')
+        this.PlayerHandler.addPlayer('eeee', '5555')
+        this.PlayerHandler.addPlayer('ffff', '6666')
         console.log('Generating random scores')
         this.PlayerHandler.players.forEach(player => player.setScore(this.Wheel.getRandomValue(1,20)))
         console.log('Applying custom colors')
         this.PlayerHandler.players[0].setColor('#ff0000')
-        this.PlayerHandler.players[1].setColor('#0000ff')
+        this.PlayerHandler.players[1].setColor('#89cff0')
         this.PlayerHandler.players[2].setColor('#ee82ee')
         this.PlayerHandler.players[3].setColor('#000')
         this.PlayerHandler.players[4].setColor('#fff')
         this.PlayerHandler.players[5].setColor('#ffa500')
         console.table(this.PlayerHandler.players)
+        this.PlayerHandler.players[4].setConnectedStatus(false)
     }
 
 
