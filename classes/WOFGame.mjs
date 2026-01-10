@@ -58,7 +58,12 @@ export class WOFGame{
 
 
     // Gameplay functions
-
+    /**
+     * 
+     * @param {string} guess 
+     * @param {string} playerID 
+     * @returns {Player} returns Player object of current turn's player
+     */
     playerGuess(guess, playerID){
         let result = this.handleGuess(guess, playerID)
         if(!result){
@@ -95,11 +100,10 @@ export class WOFGame{
         let wheelValue = this.Wheel.getWheelValue(),
             guessResult = this.Board.handleGuess(letter.character)
 
-        if (guessResult == 0){
+        if (guessResult > 0){
             return false
         }        
-        console.log(player.score)
-        player.score += (wheelValue * guessResult)
+        player.updateScore(wheelValue * guessResult)
         console.table(this.PlayerHandler.players)
         return true
     }
@@ -116,11 +120,11 @@ export class WOFGame{
 
         let guessResult = this.Board.handleGuess(letter.character)
 
-        if (guessResult == 0){
+        if (guessResult > 0){
             return false
         }
         console.log(player.score)
-        player.score -= 250
+        player.updateScore(-250)
         console.table(this.PlayerHandler.players)
         return true
     }
