@@ -48,6 +48,11 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on('yourTurn', (idFromHandler) => {
         socket.to(idFromHandler).emit('yourTurn', "You're up, dingus.")
     })
+    socket.on(EventCode.letterSubmission, (data) => {
+        console.log(data, WOF.PlayerHandler.getCurrentPlayer())
+        WOF.playerGuess(data, WOF.PlayerHandler.getCurrentPlayer().gameID)
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    })
 
     // Player Events
     // A Player connects to the server

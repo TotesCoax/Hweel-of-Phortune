@@ -2,8 +2,6 @@ console.log('File Loaded')
 
 import { EventCode } from "./classes/EventCode.js"
 
-console.log(EventCode)
-
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 
@@ -263,3 +261,21 @@ function hexToRGB(h) {
 }
 
 spinWheel(450)
+
+//Game Actions
+
+const guessForm = document.getElementById('guessForm')
+const guessInput = document.getElementById('guessInput')
+
+guessForm.addEventListener('submit', handleGuessSubmission)
+
+/**
+ * 
+ * @param {SubmitEvent} e 
+ */
+function handleGuessSubmission(e){
+    e.preventDefault()
+    let letter = guessInput.value
+    socket.emit(EventCode.letterSubmission, letter)
+    guessInput.value = ''
+}

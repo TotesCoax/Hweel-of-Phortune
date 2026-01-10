@@ -14,9 +14,11 @@
         <div id="topSection">
             <h1 id="gameTitle">Rouletters</h1>
             <div id="guessInputContainer">
-                <label for="guessInput">Enter guess:</label>
-                <input type="text" name="guessInput" id="guessInput" size="1">
-                <button type="button">Submit</button>
+                <form id="guessForm">
+                    <label for="guessInput">Enter guess:</label>
+                    <input type="text" name="guessInput" id="guessInput" size="1" autocomplete="off">
+                    <button type="submit" id="guessSubmitButton">Submit</button>
+                </form>
             </div>
             <div id="usedLettersDisplay">
                 <h3>Used Letters:</h3>
