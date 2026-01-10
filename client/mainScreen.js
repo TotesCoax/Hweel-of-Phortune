@@ -84,15 +84,6 @@ function renderBoard(arrayByLetter){
                 letter.classList.add('revealed')
             }
             letter.classList.add('processed')
-            // switch (true) {
-            //     case col.revealed:
-            //         letter.classList.add('revealed')
-            //     case col.isSpace:
-            //         letter.classList.add('game-space')
-            //     default:
-            //         letter.classList.add('processed')
-            //         break;
-            // }
             holder.append(letter)
             mainBoard.append(holder)
         }
