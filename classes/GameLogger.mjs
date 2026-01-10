@@ -1,3 +1,5 @@
+import { GameHistoryAction } from './GameHistoryAction.mjs'
+
 export class Gamelogger {
     /**
      * 
@@ -9,15 +11,19 @@ export class Gamelogger {
          */
         this.sessionID = sessionID
         /**
-         * @type {object[]} - Array of log objects
+         * @type {GameHistoryAction[]} - Array of log objects
          * @private
         */
         this.history = []
     }
     getHistory(){
-        return this.history
+        return this.history.filter(item => item.status == 'ACTIVE' )
     }
-    append(line){
-        this.history.push(line)
+    append(entry){
+        this.history.push(entry)
     }
+    write(){
+    }
+
+    
 }

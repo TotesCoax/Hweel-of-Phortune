@@ -1,7 +1,11 @@
 export class GameHistoryAction {
     constructor(agent, action){
+        this.id = `${Date.now()}`
         this.agent = agent
         this.action = action
-        this.status = 'active'
+        /**
+         * @type {"ACTIVE"|"REMOVED"}
+         */
+        this.status = 'ACTIVE'
     }
 }
