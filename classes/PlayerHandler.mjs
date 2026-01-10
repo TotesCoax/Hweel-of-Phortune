@@ -1,4 +1,3 @@
-// const {Player} = require("./Player.mjs")
 import { Player } from "./Player.mjs"
 
 export class PlayerHandler{
