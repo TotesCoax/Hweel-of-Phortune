@@ -124,12 +124,13 @@ export class Board{
      * Handles guesses and also buying of vowels.
      * For guesses, times returned number by the wheel amount, for vowels subtract cost of vowels.
      * @param {string} letter
-     * @returns {number} number of found letters
+     * @returns {number} number of found letters or -1 if letter is already guessed.
      */
     handleGuess(letter){
         let guessLetter = letter.toUpperCase()
         if(this.letterAlreadyGuessed(guessLetter)){
             console.log("Letter already guessed.")
+            return -1
         }
         this.guessedLetters.push(guessLetter)
         let numFoundLetters = 0
