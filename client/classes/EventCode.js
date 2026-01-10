@@ -1,4 +1,9 @@
-export const EventCode = Object.freeze({
+/**
+ * Enum for list of valid codes
+ * @readonly
+ * @enum {string}
+ */
+const EventCode = Object.freeze({
     //General Codes
     connection: "connection",
     disconnect: "disconnect",
@@ -12,3 +17,5 @@ export const EventCode = Object.freeze({
     colorChange: "colorChange",
     letterSubmission: "letterSubmission"
 })
+
+export { EventCode }
