@@ -8,16 +8,8 @@ console.log('File Loaded')
  * @property {string} color - hex code of player color
  * @property {string} socketID - id of the socket
  */
-let playerInfo = {
-  gameID: 'new',
-  name: 'Bugs',
-  score: '0',
-  color: '#fff',
-  socketID: '',
-  isConnected: false
-}
 
-function updateLocalStorage(){
+function updateLocalStorage(playerInfo){
   let value = JSON.stringify(playerInfo)
   window.localStorage.setItem('playerInfo', value)
 }
@@ -39,9 +31,8 @@ socket.on("connect", () => {
     console.log('Connected as: ', playerID)
     socket.emit('playerJoin', playerID, (res) => {
       console.log(res)
-      playerInfo = res
-      updateInputFields(playerInfo)
-      updateLocalStorage()
+      updateInputFields(res)
+      updateLocalStorage(res)
       console.log('Handshake complete, local storage updated.')
     })
 })
@@ -64,7 +55,7 @@ function stopScrollCalculations() {
   clearInterval(scrollRecorder)
   console.log(scrollSpeedToSend)
   scrollPowerContainer.scroll({top: 0, behavior: "smooth"})
-  socket.emit("speedData", {value: scrollSpeedToSend, id: playerInfo.id})
+  socket.emit("speedData", {value: scrollSpeedToSend, id: getPlayerDataFromLocal().id})
 }
 
 // Scroll Speed Calc Functions
@@ -141,11 +132,11 @@ menuDisplay.addEventListener('click', (event) => {
 
 nameInput.addEventListener('input', () => {
   console.log('Namechange triggred')
-  socket.emit('nameChange', {id: playerInfo.gameID, name: nameInput.value})
+  socket.emit('nameChange', {id: getPlayerDataFromLocal().gameID, name: nameInput.value})
 })
 
 colorInput.addEventListener('input', () => {
-  socket.emit('colorChange', {id: playerInfo.gameID, color: colorInput.value})
+  socket.emit('colorChange', {id: getPlayerDataFromLocal().gameID, color: colorInput.value})
 })
 
 /**

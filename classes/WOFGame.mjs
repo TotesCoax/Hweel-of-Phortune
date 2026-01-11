@@ -141,6 +141,10 @@ export class WOFGame{
         }
     }
 
+    spinWheel(speedValue){
+        return this.Wheel.spinWheel(speedValue)
+    }
+
     createTestEnvironment(){
         console.log('Creating Test players')
         this.PlayerHandler.addPlayer('aaaa', '1111')

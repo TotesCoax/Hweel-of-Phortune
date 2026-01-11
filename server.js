@@ -83,9 +83,9 @@ GameServer.io.on(EventCode.connection, (socket) => {
         console.log(data)
         // Check if the player is the active player, ignore all other submissions (let the players have freedom to fiddle with it)
         // if(WOF.PlayerHandler.isActivePlayer(data.id)){
-            let spinPower = WOF.Wheel.spinWheel(data.value)
-            console.log(spinPower)
-            GameServer.io.to('board').emit('spinValue', spinPower)
+            let spinPower = WOF.spinWheel(data.value)
+            console.log(spinPower, WOF.Wheel.getWheelValue(), WOF.Wheel.currentDeg)
+            GameServer.io.to('board').emit('wheelSpin', spinPower)
         // }
     })
     socket.on(EventCode.nameChange, (data) => {

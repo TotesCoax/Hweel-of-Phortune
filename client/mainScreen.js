@@ -218,12 +218,16 @@ function setSpinAnim(start, end){
     document.documentElement.style.setProperty('--ending-degree', end)
 }
 
+socket.on('wheelSpin', spinWheel)
+
 /**
  * 
  * @param {string} power power value sent down from the server. 
  */
 function spinWheel(power){
-    let start = wheelContainer.style.transform
+    let start = wheelContainer.style.transform,
+        start2 = document.documentElement.style.getPropertyValue('--starting-degree')
+    console.log(start, start2)
     setSpinAnim(start, `${power}deg`)
     wheelContainer.classList.add('spinning')
 }
@@ -260,7 +264,7 @@ function hexToRGB(h) {
   return {'red': +r, 'green': +g, 'blue': +b}
 }
 
-spinWheel(450)
+// spinWheel(450)
 
 //Game Actions
 
