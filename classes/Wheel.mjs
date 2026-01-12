@@ -59,13 +59,16 @@ export class Wheel{
         return Math.round((speedFromPhone * this.speedPowerFactor) + (this.calcRandomNudge(speedFromPhone))) 
     }
     resetCurrentDeg(){
+        console.log(`Current reading: ${this.currentDeg}`)
         while (this.currentDeg > 360){
+            console.log(`Lowering from ${this.currentDeg} to ${this.currentDeg - 360}`)
             this.currentDeg -= 360
         }
         return this.currentDeg
     }
     spinWheel(speedFromPhone){
         let rotation = this.calcWheelSpinPowerInDegrees(speedFromPhone)
+        console.log(`Power Rating: ${rotation}, spinning from ${this.currentDeg} to ${this.currentDeg + rotation}`)
         this.currentDeg += rotation
         this.resetCurrentDeg()
         return rotation

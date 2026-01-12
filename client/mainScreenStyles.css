@@ -1,6 +1,7 @@
 :root {
     --starting-degree: 0deg;
-    --ending-degree: 180deg;
+    --spin-degree: 0deg;
+    --ending-degree: 0deg;
 
 }
 
@@ -120,7 +121,7 @@
         transform: rotate(var(--starting-degree));
     }
     to {
-        transform: rotate(var(--ending-degree));
+        transform: rotate(var(--spin-degree));
     }
 }
 

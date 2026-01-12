@@ -1,8 +1,6 @@
 import { LocallyConnectedServer } from './classes/LocallyConnectedServer.mjs'
-import {v4 as makeID} from 'uuid'
+import { v4 as makeID } from 'uuid'
 import { EventCode } from './client/classes/EventCode.js'
-// const {v4: makeID} = require('uuid')
-// const {EventCode} = require('./classes/EventCode')
 
 import { fileURLToPath } from 'url'
 import path from 'path'
@@ -11,7 +9,6 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Game imports
-// const {WOFGame} = require('./classes/WOFGame')
 import { WOFGame } from './classes/WOFGame.mjs'
 
 const GameServer = new LocallyConnectedServer('client')
@@ -83,9 +80,13 @@ GameServer.io.on(EventCode.connection, (socket) => {
         console.log(data)
         // Check if the player is the active player, ignore all other submissions (let the players have freedom to fiddle with it)
         // if(WOF.PlayerHandler.isActivePlayer(data.id)){
-            let spinPower = WOF.spinWheel(data.value)
-            console.log(spinPower, WOF.Wheel.getWheelValue(), WOF.Wheel.currentDeg)
-            GameServer.io.to('board').emit('wheelSpin', spinPower)
+            let startingDeg = WOF.Wheel.currentDeg,
+                spinPower = WOF.spinWheel(data.value),
+                endingDeg = WOF.Wheel.currentDeg
+            console.log(`Current Value: ${WOF.Wheel.getWheelValue()}`)
+            console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
+            let spinData = {start: startingDeg, power: spinPower, end: endingDeg}
+            GameServer.io.to('board').emit('wheelSpin', spinData)
         // }
     })
     socket.on(EventCode.nameChange, (data) => {
@@ -121,9 +122,7 @@ GameServer.server.listen(3000, () => {
 
 const WOF = new WOFGame()
 
-// WOF.Wheel.generateSections(1000)
-
-// WOF.Board.handleGuess('e')
+Object.entries(WOF.Wheel).forEach(entry => console.log(entry))
 
 WOF.playerGuess('r', 'aaaa')
 WOF.playerGuess('s', 'bbbb')

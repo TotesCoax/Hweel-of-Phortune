@@ -14,7 +14,7 @@ socket.on('connect', () => {
         renderBoard(res.Board.board)
         renderClue(res.Board.clue)
         renderGuessedLetters(res.Board.guessedLetters)
-        renderWheel(res.Wheel.sections)
+        renderWheel(res.Wheel)
         renderPlayerTiles(res.Players)
       })
     })
@@ -27,7 +27,7 @@ socket.on('playerUpdate', (data) => {
         renderBoard(res.Board.board)
         renderClue(res.Board.clue)
         renderGuessedLetters(res.Board.guessedLetters)
-        renderWheel(res.Wheel.sections)
+        renderWheel(res.Wheel)
         renderPlayerTiles(res.Players)
     })
 })
@@ -186,14 +186,15 @@ function arrangeWheelSections(){
 }
 arrangeWheelSections()
 
-function renderWheel(wheelSections){
+function renderWheel(wheelObject){
     let sectionDivs = document.querySelectorAll('.wheel-text'),
         index = 0
-    console.log(`Setting Section Values: ${wheelSections}`)
-    wheelSections.forEach(section => {
+    console.log(`Setting Section Values: ${wheelObject.sections}`)
+    wheelObject.sections.forEach(section => {
         sectionDivs[index].innerText = section
         index++
     })
+    spinWheel({start: 0, power: wheelObject.currentDeg, end: wheelObject.currentDeg})
 }
 
 
@@ -207,29 +208,42 @@ wheelContainer.addEventListener('animationend', resetCurrentDeg)
  */
 function resetCurrentDeg(){
     console.log('Wheel Resetting to: ', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
-    let newVal = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
-    wheelContainer.style.transform = `rotate(${newVal})`
+    let newStarting = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
+    wheelContainer.style.transform = `rotate(${newStarting})`
     wheelContainer.classList.remove('spinning')
     console.log('Wheel Reset to: ', wheelContainer.style)
 }
 
-function setSpinAnim(start, end){
-    document.documentElement.style.setProperty('--starting-degree', start)
-    document.documentElement.style.setProperty('--ending-degree', end)
+function setSpinAnim(start, power, end){
+    document.documentElement.style.setProperty('--starting-degree', `${start}deg`)
+    document.documentElement.style.setProperty('--spin-degree', `-${start+power}deg`)
+    document.documentElement.style.setProperty('--ending-degree', `-${end}deg`)
 }
 
 socket.on('wheelSpin', spinWheel)
 
 /**
- * 
- * @param {string} power power value sent down from the server. 
+ * @typedef {object} SpinData 
+ * @prop {number} start
+ * @prop {number} power
+ * @prop {number} end
  */
-function spinWheel(power){
-    let start = wheelContainer.style.transform,
-        start2 = document.documentElement.style.getPropertyValue('--starting-degree')
-    console.log(start, start2)
-    setSpinAnim(start, `${power}deg`)
+
+// function spinWheel(power){
+    //     let start = wheelContainer.style.transform,
+    //         start2 = document.documentElement.style.getPropertyValue('--starting-degree')
+    //     console.log(start, start2, power)
+    //     setSpinAnim(start, `${power}deg`)
+    //     wheelContainer.classList.add('spinning')
+    // }
+/**
+ * 
+ * @param {SpinData} dataFromServer power value sent down from the server. 
+ */
+function spinWheel(dataFromServer){
+    setSpinAnim(dataFromServer.start, dataFromServer.power, dataFromServer.end)
     wheelContainer.classList.add('spinning')
+    wheelContainer.addEventListener('animationend', resetCurrentDeg, {once: true})
 }
 
 // Player board stuff
