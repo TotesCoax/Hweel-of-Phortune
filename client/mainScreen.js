@@ -241,7 +241,8 @@ socket.on('wheelSpin', spinWheel)
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
-    setSpinAnim(dataFromServer.start, dataFromServer.power, dataFromServer.end)
+    let offset = 80
+    setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
     wheelContainer.classList.add('spinning')
     wheelContainer.addEventListener('animationend', resetCurrentDeg, {once: true})
 }

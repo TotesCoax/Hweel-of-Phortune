@@ -100,7 +100,6 @@
 
 /* Wheel Stuff */
 #wheelContainer {
-    grid-area: wheel;
     height: 90%;
     aspect-ratio: 1/1;
     background-color: silver;
@@ -108,12 +107,38 @@
     border: 5px solid black;
     overflow: hidden;
     position: relative;
+    left: 8%;
     transform: rotate(0deg);
     justify-self: center;
 }
 
+.wheel-section:nth-child(even){
+    background-color: lightblue;
+}
+
 #wheelContainer.spinning {
     animation: wheelSpin 3s ease-out;
+}
+
+#wheelSection {
+    grid-area: wheel;
+}
+
+#wheelIndicator {
+    height: 5%;
+    width: 10%;
+    background-color: red;
+    clip-path: polygon(
+        0% 20%,
+        60% 20%,
+        60% 0%,
+        100% 50%,
+        60% 100%,
+        60% 80%,
+        0% 80%
+        );
+    position: relative;
+    top: -50%;
 }
 
 @keyframes wheelSpin {
@@ -133,7 +158,6 @@
     transform: translateX(-50%);
     transform-origin: bottom;
     left: 44%;
-    background-color: pink;
     display: flex;
     justify-content: center;
     align-items: flex-start;
