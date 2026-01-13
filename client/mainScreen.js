@@ -194,14 +194,11 @@ function renderWheel(wheelObject){
         sectionDivs[index].innerText = section
         index++
     })
-    spinWheel({start: 0, power: wheelObject.currentDeg, end: wheelObject.currentDeg})
+    spinWheel({start: 0, power: wheelObject.currentDeg, end: wheelObject.currentDeg, index: 0})
 }
 
 
 let wheelContainer = document.getElementById('wheelContainer')
-
-// when animation ends, trigger a value reset
-wheelContainer.addEventListener('animationend', resetCurrentDeg)
 
 /**
  * Resets the degree values to more manageable numbers for next calculation.
@@ -220,6 +217,15 @@ function setSpinAnim(start, power, end){
     document.documentElement.style.setProperty('--ending-degree', `-${end}deg`)
 }
 
+function setFlashingSection(index){
+    let wheelSections = document.querySelectorAll('.wheel-section'),
+        currentSection = wheelSections[index]
+    currentSection.addEventListener('animationend', () => {
+        currentSection.classList.remove('flashing')
+    }, {once: true})
+    currentSection.classList.add('flashing')
+}
+
 socket.on('wheelSpin', spinWheel)
 
 /**
@@ -227,24 +233,22 @@ socket.on('wheelSpin', spinWheel)
  * @prop {number} start
  * @prop {number} power
  * @prop {number} end
+ * @prop {number} index
  */
 
-// function spinWheel(power){
-    //     let start = wheelContainer.style.transform,
-    //         start2 = document.documentElement.style.getPropertyValue('--starting-degree')
-    //     console.log(start, start2, power)
-    //     setSpinAnim(start, `${power}deg`)
-    //     wheelContainer.classList.add('spinning')
-    // }
 /**
  * 
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
     let offset = 80
+    console.log(dataFromServer)
     setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
+    wheelContainer.addEventListener('animationend', () => {
+        resetCurrentDeg()
+        setFlashingSection(dataFromServer.index)
+    }, {once: true})
     wheelContainer.classList.add('spinning')
-    wheelContainer.addEventListener('animationend', resetCurrentDeg, {once: true})
 }
 
 // Player board stuff

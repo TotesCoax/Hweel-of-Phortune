@@ -82,10 +82,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
         // if(WOF.PlayerHandler.isActivePlayer(data.id)){
             let startingDeg = WOF.Wheel.currentDeg,
                 spinPower = WOF.spinWheel(data.value),
-                endingDeg = WOF.Wheel.currentDeg
+                endingDeg = WOF.Wheel.currentDeg,
+                wheelIndex = WOF.Wheel.getWheelIndex()
             console.log(`Current Value: ${WOF.Wheel.getWheelValue()}`)
             console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
-            let spinData = {start: startingDeg, power: spinPower, end: endingDeg}
+            let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
+            console.log(spinData)
             GameServer.io.to('board').emit('wheelSpin', spinData)
         // }
     })
