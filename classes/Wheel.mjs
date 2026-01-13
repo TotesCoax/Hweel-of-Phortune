@@ -66,6 +66,11 @@ export class Wheel{
         }
         return this.currentDeg
     }
+    /**
+     * Currently spins counter clockwise, for clockwise, times rotation by -1
+     * @param {number} speedFromPhone 
+     * @returns {number}
+     */
     spinWheel(speedFromPhone){
         let rotation = this.calcWheelSpinPowerInDegrees(speedFromPhone)
         console.log(`Power Rating: ${rotation}, spinning from ${this.currentDeg} to ${this.currentDeg + rotation}`)
