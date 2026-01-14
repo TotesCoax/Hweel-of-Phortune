@@ -349,6 +349,15 @@ gameFileButton.addEventListener('click', () => {
     })
 })
 
+// Next Round
+
+const nextRoundButton = document.getElementById('nextRoundButton')
+nextRoundButton.addEventListener('click', nextRound)
+
+function nextRound(){
+    socket.emit('nextRound', 'Blerp')
+}
+
 
 // Player Menu
 

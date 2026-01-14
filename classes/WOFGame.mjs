@@ -9,6 +9,7 @@ import { Wheel } from './Wheel.mjs'
 import { PlayerHandler } from './PlayerHandler.mjs'
 import { Letter } from './Letter.mjs'
 import { Player } from './Player.mjs'
+import { BoardQueue } from './BoardQueue.mjs'
 
 export class WOFGame{
     /**
@@ -24,8 +25,11 @@ export class WOFGame{
         this.PlayerHandler = new PlayerHandler(players)
         this.isWaitingForSpin = false
         this.isWaitingForGuess = false
-        this.createTestEnvironment()
-        this.PuzzleQueue = []
+        /**
+         * @type {BoardQueue}
+        */
+       this.PuzzleQueue = []
+       this.createTestEnvironment()
     }
 
     // Setup Functions
@@ -44,6 +48,13 @@ export class WOFGame{
     }
     shuffleWheel(){
         this.Wheel.shuffleSections()
+    }
+    enqueuePuzzles(arrayOfCluesAndPuzzles){
+        this.PuzzleQueue = new BoardQueue(arrayOfCluesAndPuzzles)
+    }
+    nextPuzzle(){
+        let nextPuzz = this.PuzzleQueue.dequeue()
+        this.startNewRound(nextPuzz.clue, nextPuzz.puzzle)
     }
 
     // Utility functions

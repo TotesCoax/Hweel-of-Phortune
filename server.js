@@ -57,6 +57,13 @@ GameServer.io.on(EventCode.connection, (socket) => {
         WOF.PuzzleQueue = CSVParser.csvToArray(data)
         console.table(WOF.PuzzleQueue)
         WOF.createNewBoard(WOF.PuzzleQueue[0][0], WOF.PuzzleQueue[0][1])
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    })
+
+    socket.on('nextRound', (data) => {
+        console.log(data)
+        WOF.nextPuzzle()
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
 
     //Manual Mode
