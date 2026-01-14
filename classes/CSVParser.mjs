@@ -1,19 +1,15 @@
-export class FileHandler {
+export class CSVParser {
     constructor(){
         this.pathToFile
     }
     /**
      * 
      * @param {string} csv 
-     * @returns 
+     * @returns {string[]}
      */
-    csvToMap(csv){
+    static csvToArray(csv){
         return csv.split('\r\n').map( line => {
-            // Split on commas outside of quotes
-            let parsedLine = this.parseOnCommas(line)
-            parsedLine.forEach(item => {
-                item = this.cleanUpOuterQuotes(item)
-            })
+            return this.parseOnCommas(line)
         })
     }
     /**
@@ -21,7 +17,7 @@ export class FileHandler {
      * @param {string} line 
      * @returns {string[]} - parsed string
      */
-    parseOnCommas(line){
+    static parseOnCommas(line){
         return line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/)
     }
     /**
@@ -29,7 +25,7 @@ export class FileHandler {
      * @param {string} string 
      * @returns {string}
      */
-    cleanUpOuterQuotes(string){
+    static cleanUpOuterQuotes(string){
         return string.replaceAll("\"\"", ";").replaceAll("\"", "").replaceAll(";", "\"")
     }
 }
