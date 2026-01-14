@@ -98,7 +98,7 @@ export class Board{
     populateBoard(rackedRows){
         switch (rackedRows.length) {
             case 1:
-                this.assignLettersToRow(this.board[1], rackedRows)
+                this.assignLettersToRow(this.board[1], rackedRows[0])
                 break;
             case 2:
                 this.assignLettersToRow(this.board[1], rackedRows[0])
