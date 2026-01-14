@@ -100,7 +100,7 @@ export class WOFGame{
         let wheelValue = this.Wheel.getWheelValue(),
             guessResult = this.Board.handleGuess(letter.character)
 
-        if (guessResult > 0){
+        if (guessResult < 0){
             return false
         }        
         player.updateScore(wheelValue * guessResult)
@@ -120,7 +120,7 @@ export class WOFGame{
 
         let guessResult = this.Board.handleGuess(letter.character)
 
-        if (guessResult > 0){
+        if (guessResult < 0){
             return false
         }
         console.log(player.score)
