@@ -330,6 +330,26 @@ function gameStateRequest(){
 
 // File Upload
 
+const gameFileUpload = document.getElementById('gameFileUpload')
+const gameFileButton = document.getElementById('gameFileButton')
+
+gameFileButton.addEventListener('click', () => {
+    const Reader = new FileReader()
+
+    Reader.readAsText(gameFileUpload.files[0])
+
+    Reader.addEventListener('load', () => {
+        const csv = Reader.result
+        // const arrayFromCSV =  csv.split('\r\n').map((line) => {
+        //     // Split on commas outside of quotes
+        //     return line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/)
+        // })
+        console.table(csv)
+        socket.emit('gameFile', csv)
+    })
+})
+
+
 // Player Menu
 
     // Add Player

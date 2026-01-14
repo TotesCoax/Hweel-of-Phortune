@@ -25,6 +25,7 @@ export class WOFGame{
         this.isWaitingForSpin = false
         this.isWaitingForGuess = false
         this.createTestEnvironment()
+        this.PuzzleQueue = []
     }
 
     // Setup Functions

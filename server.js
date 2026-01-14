@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename)
 
 // Game imports
 import { WOFGame } from './classes/WOFGame.mjs'
+import { CSVParser } from './classes/CSVParser.mjs'
 
 const GameServer = new LocallyConnectedServer('client')
 
@@ -50,6 +51,15 @@ GameServer.io.on(EventCode.connection, (socket) => {
         WOF.playerGuess(data, WOF.PlayerHandler.getCurrentPlayer().gameID)
         GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
+
+    socket.on('gameFile', (data) => {
+        console.log(data)
+        WOF.PuzzleQueue = CSVParser.csvToArray(data)
+        console.table(WOF.PuzzleQueue)
+        WOF.createNewBoard(WOF.PuzzleQueue[0][0], WOF.PuzzleQueue[0][1])
+    })
+
+    //Manual Mode
 
     socket.on('manualAdd', (data) => {
         console.log(`Adding new player manually: ${data}`)
