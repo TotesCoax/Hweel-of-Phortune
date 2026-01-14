@@ -18,8 +18,7 @@ export class Wheel{
             specialSpaces = 4,
             requiredNumbers = numberOfSections - specialSpaces
         for (let index = 0; index < requiredNumbers; index++) {
-            // sectionValues.push(this.getRandomValue(this.minValue, this.maxValue))
-            sectionValues.push(sectionValues.length + 1)
+            sectionValues.push(this.getRandomValue(this.minValue, this.maxValue))
         }
         sectionValues.push(bonusValue, 'bankrupt', 'lose a turn', 'lose a turn2')
         this.sections = sectionValues
