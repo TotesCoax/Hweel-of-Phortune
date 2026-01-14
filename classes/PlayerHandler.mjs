@@ -62,11 +62,11 @@ export class PlayerHandler{
         return newPlayer.id
     }
     removePlayer(id){
-        if (!this.isPlayerExists(gameID)){
+        if (!this.isPlayerExists(id)){
             console.log("No player found.")
-            return
+            return []
         }
-        let removedPlayer = this.players.splice(this.findPlayer(id))
+        let removedPlayer = this.players.splice(this.getPlayerIndex(id), 1)
         return removedPlayer
     }
     isPlayerExists(id){

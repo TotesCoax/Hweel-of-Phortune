@@ -137,7 +137,7 @@ export class WOFGame{
         return {
             Board: this.Board,
             Wheel: this.Wheel,
-            Players: this.PlayerHandler.players
+            PlayerHandler: this.PlayerHandler
         }
     }
 

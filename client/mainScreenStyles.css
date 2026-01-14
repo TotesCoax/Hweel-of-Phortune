@@ -243,8 +243,12 @@
 
 .player-tile {
     width: 20%;
-    border-radius: 5%;
+    border-radius: 1vw;
     background-color: lightblue;
+}
+
+.player-tile.active {
+    border: 5px black solid;
 }
 
 .player-tile p {

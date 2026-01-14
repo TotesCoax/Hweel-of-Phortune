@@ -46,8 +46,21 @@ GameServer.io.on(EventCode.connection, (socket) => {
         socket.to(idFromHandler).emit('yourTurn', "You're up, dingus.")
     })
     socket.on(EventCode.letterSubmission, (data) => {
-        console.log(data, WOF.PlayerHandler.getCurrentPlayer())
+        console.log(`${data, WOF.PlayerHandler.getCurrentPlayer().name}'s guess: ${data}`)
         WOF.playerGuess(data, WOF.PlayerHandler.getCurrentPlayer().gameID)
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    })
+
+    socket.on('manualAdd', (data) => {
+        console.log(`Adding new player manually: ${data}`)
+        WOF.PlayerHandler.addPlayer(data, 'manual')
+        WOF.PlayerHandler.getPlayer(data).setName(data)
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    })
+
+    socket.on('manualRemove', (data) => {
+        console.log(`Removing player manually: ${data}`)
+        let removed = WOF.PlayerHandler.removePlayer(data)
         GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
 

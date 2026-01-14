@@ -15,22 +15,13 @@ socket.on('connect', () => {
         renderClue(res.Board.clue)
         renderGuessedLetters(res.Board.guessedLetters)
         renderWheel(res.Wheel)
-        renderPlayerTiles(res.Players)
+        renderPlayerTiles(res.PlayerHandler.players, res.PlayerHandler.turnIndicator)
+        renderPlayerList(res.PlayerHandler.players)
       })
     })
 })
 
-socket.on('playerUpdate', (data) => {
-    // Eventually re-render player board
-    socket.emit('gamestateRequest', socket.id, (res)=> {
-        console.log(res)
-        renderBoard(res.Board.board)
-        renderClue(res.Board.clue)
-        renderGuessedLetters(res.Board.guessedLetters)
-        renderWheel(res.Wheel)
-        renderPlayerTiles(res.Players)
-    })
-})
+socket.on('playerUpdate', gameStateRequest)
 
 
 // socket.on('boardUpdate', boardUpdate)
@@ -126,13 +117,14 @@ function renderGuessedLetters(arrayOfChar){
 /**
  * @param {Player[]} playersArray 
  */
-function renderPlayerTiles(playersArray){
+function renderPlayerTiles(playersArray, turnIndex){
     let playerContainer = document.querySelector("#playerContainer")
     clearChildren(playerContainer)
     playersArray.forEach(player => {
         let playerTile = createPlayerTile(player)
         playerContainer.append(playerTile)
     })
+    playerContainer.children[turnIndex].classList.add('active')
 }
 
 /**
@@ -196,6 +188,22 @@ function renderWheel(wheelObject){
     })
     spinWheel({start: 0, power: wheelObject.currentDeg, end: wheelObject.currentDeg, index: 0})
 }
+/**
+ * 
+ * @param {Player[]} playersArray 
+ */
+function renderPlayerList(playersArray){
+    let selectGroup = document.getElementById('playerSelect'),
+        blankOpt = document.createElement('option')
+    clearChildren(selectGroup)
+    selectGroup.append(blankOpt)
+    playersArray.forEach(player => {
+        let optionEl = document.createElement('option')
+        optionEl.value = player.name
+        optionEl.innerText = player.name
+        selectGroup.append(optionEl)
+    })
+}
 
 
 let wheelContainer = document.getElementById('wheelContainer')
@@ -241,7 +249,7 @@ socket.on('wheelSpin', spinWheel)
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
-    let offset = 80
+    let offset = 82
     console.log(dataFromServer)
     setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
     wheelContainer.addEventListener('animationend', () => {
@@ -302,3 +310,40 @@ function handleGuessSubmission(e){
     socket.emit(EventCode.letterSubmission, letter)
     guessInput.value = ''
 }
+
+//Admin Menus
+
+// Refresh
+const gamestateRefreshButton = document.getElementById('gamestateRefreshButton')
+gamestateRefreshButton.addEventListener('click', gameStateRequest)
+function gameStateRequest(){
+        socket.emit('gamestateRequest', socket.id, (res)=> {
+        console.log(res)
+        renderBoard(res.Board.board)
+        renderClue(res.Board.clue)
+        renderGuessedLetters(res.Board.guessedLetters)
+        renderWheel(res.Wheel)
+        renderPlayerTiles(res.PlayerHandler.players, res.PlayerHandler.turnIndicator)
+        renderPlayerList(res.PlayerHandler.players)
+    })
+}
+
+// File Upload
+
+// Player Menu
+
+    // Add Player
+    const addPlayerButton = document.getElementById('addPlayerButton')
+    addPlayerButton.addEventListener('click', addPlayer)
+    function addPlayer(){
+        let playerName = document.getElementById('addPlayer').value
+        socket.emit('manualAdd', playerName)
+    }
+
+    // Remove Player
+    const removePlayerButton = document.getElementById('removePlayerButton')
+    removePlayerButton.addEventListener('click', removePlayer)
+    function removePlayer(){
+        let playerName = document.querySelector('#playerSelect').value
+        socket.emit('manualRemove', playerName)
+    }
