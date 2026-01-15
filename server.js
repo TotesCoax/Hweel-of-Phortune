@@ -83,6 +83,20 @@ GameServer.io.on(EventCode.connection, (socket) => {
         GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
 
+    socket.on('offlineSpin', (data) => {
+        console.log('Offline spin', data)
+            let startingDeg = WOF.Wheel.currentDeg,
+            spinValue = (WOF.Wheel.getRandomValue(1, 50)/100),
+            spinPower = WOF.spinWheel(spinValue),
+            endingDeg = WOF.Wheel.currentDeg,
+            wheelIndex = WOF.Wheel.getWheelIndex()
+        console.log(`Current Value: ${WOF.Wheel.getWheelValue()}, SpinValue: ${spinValue}`)
+        console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
+        let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
+        console.log(spinData)
+        GameServer.io.to('board').emit('wheelSpin', spinData)
+    })
+
     // Player Events
     // A Player connects to the server
     socket.on(EventCode.playerJoin, (id, callback) =>{
@@ -164,6 +178,8 @@ WOF.playerGuess('t', 'cccc')
 WOF.playerGuess('l', 'aaaa')
 WOF.playerGuess('n', 'bbbb')
 WOF.playerGuess('e', 'cccc')
+
+WOF.Wheel.currentDeg = 0
 
 // WOF.Board.board.forEach(row => {
 //     console.table(row)
