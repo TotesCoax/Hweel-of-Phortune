@@ -169,21 +169,3 @@ GameServer.server.listen(3000, () => {
 
 
 const WOF = new WOFGame()
-
-Object.entries(WOF.Wheel).forEach(entry => console.log(entry))
-
-WOF.playerGuess('r', 'aaaa')
-WOF.playerGuess('s', 'bbbb')
-WOF.playerGuess('t', 'cccc')
-WOF.playerGuess('l', 'aaaa')
-WOF.playerGuess('n', 'bbbb')
-WOF.playerGuess('e', 'cccc')
-
-WOF.Wheel.currentDeg = 0
-
-// WOF.Board.board.forEach(row => {
-//     console.table(row)
-// })
-
-
-// console.log(WOF)
