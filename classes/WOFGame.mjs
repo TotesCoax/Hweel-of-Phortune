@@ -28,7 +28,7 @@ export class WOFGame{
         /**
          * @type {BoardQueue}
         */
-       this.PuzzleQueue = []
+       this.PuzzleQueue = new BoardQueue()
        this.createTestEnvironment()
     }
 
@@ -50,7 +50,9 @@ export class WOFGame{
         this.Wheel.shuffleSections()
     }
     enqueuePuzzles(arrayOfCluesAndPuzzles){
-        this.PuzzleQueue = new BoardQueue(arrayOfCluesAndPuzzles)
+        this.PuzzleQueue.populateQueue(arrayOfCluesAndPuzzles)
+        console.log(this.PuzzleQueue)
+        console.log(Object.getPrototypeOf(this.PuzzleQueue))
     }
     nextPuzzle(){
         let nextPuzz = this.PuzzleQueue.dequeue()

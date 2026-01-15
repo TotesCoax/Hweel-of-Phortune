@@ -11,6 +11,8 @@ const __dirname = path.dirname(__filename)
 // Game imports
 import { WOFGame } from './classes/WOFGame.mjs'
 import { CSVParser } from './classes/CSVParser.mjs'
+import { BasicQueue } from './classes/BasicQueue.mjs'
+import { BoardQueue } from './classes/BoardQueue.mjs'
 
 const GameServer = new LocallyConnectedServer('client')
 
@@ -54,9 +56,9 @@ GameServer.io.on(EventCode.connection, (socket) => {
 
     socket.on('gameFile', (data) => {
         console.log(data)
-        WOF.PuzzleQueue = CSVParser.csvToArray(data)
+        WOF.PuzzleQueue.populateQueue(CSVParser.csvToArray(data))
         console.table(WOF.PuzzleQueue)
-        WOF.createNewBoard(WOF.PuzzleQueue[0][0], WOF.PuzzleQueue[0][1])
+        WOF.createNewBoard(WOF.PuzzleQueue.items[0].clue, WOF.PuzzleQueue.items[0].puzzle)
         GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
 
