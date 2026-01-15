@@ -186,7 +186,8 @@ function renderWheel(wheelObject){
         sectionDivs[index].innerText = section
         index++
     })
-    spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
+    // spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
+    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 81)*-1}deg)`
 }
 /**
  * 
