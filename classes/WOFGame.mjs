@@ -29,7 +29,6 @@ export class WOFGame{
          * @type {BoardQueue}
         */
        this.PuzzleQueue = new BoardQueue()
-       this.createTestEnvironment()
     }
 
     // Setup Functions
@@ -114,7 +113,7 @@ export class WOFGame{
         let wheelValue = this.Wheel.getWheelValue(),
             guessResult = this.Board.handleGuess(letter.character)
 
-        if (guessResult < 0){
+        if (guessResult <= 0){
             return false
         }        
         player.updateScore(wheelValue * guessResult)
@@ -128,7 +127,7 @@ export class WOFGame{
      * @param {Player} player 
      */
     handleVowel(letter, player){
-        if (player.score < 250){
+        if (player.score <= 250){
             return false
         }
 
