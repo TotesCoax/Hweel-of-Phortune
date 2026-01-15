@@ -181,12 +181,12 @@ arrangeWheelSections()
 function renderWheel(wheelObject){
     let sectionDivs = document.querySelectorAll('.wheel-text'),
         index = 0
-    console.log(`Setting Section Values: ${wheelObject.sections}`)
+    console.log(`Setting Section Values: ${wheelObject.sections}, ${wheelObject.currentDeg}`)
     wheelObject.sections.forEach(section => {
         sectionDivs[index].innerText = section
         index++
     })
-    wheelContainer.style.transform = `rotate(${wheelObject.ending})`
+    spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
 }
 /**
  * 
@@ -249,7 +249,7 @@ socket.on('wheelSpin', spinWheel)
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
-    let offset = 82
+    let offset = 81
     console.log(dataFromServer)
     setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
     wheelContainer.addEventListener('animationend', () => {
@@ -258,6 +258,14 @@ function spinWheel(dataFromServer){
     }, {once: true})
     wheelContainer.classList.add('spinning')
 }
+
+    // Offline spin
+    const offlineSpinButton = document.getElementById('offlineSpinButton')
+    offlineSpinButton.addEventListener('click', offlineSpin)
+
+    function offlineSpin(){
+        socket.emit('offlineSpin', 'Spinaroonie')
+    }
 
 // Player board stuff
 
