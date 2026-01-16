@@ -71,7 +71,7 @@ export class PlayerHandler{
     }
     isPlayerExists(id){
         console.log('Checking if player exists.', this.getPlayerIndex(id))
-        return this.getPlayerIndex(id) > 0
+        return this.getPlayerIndex(id) >= 0
     }
     isActivePlayer(id){
         return this.getPlayerIndex(id) == this.turnIndicator
