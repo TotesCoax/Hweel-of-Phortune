@@ -39,6 +39,7 @@ export class WOFGame{
      */
     startNewRound(clue, phrase){
         this.createNewBoard(clue, phrase)
+        this.PlayerHandler.resetScoresToZero()
         // For now, let's not scale up point values
         this.Wheel.shuffleSections()
     }

@@ -62,8 +62,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on('gameFile', (data) => {
         console.log(data)
         WOF.PuzzleQueue.populateQueue(CSVParser.csvToArray(data))
-        console.table(WOF.PuzzleQueue)
-        WOF.createNewBoard(WOF.PuzzleQueue.items[0].clue, WOF.PuzzleQueue.items[0].puzzle)
+        WOF.createNewBoard(WOF.nextPuzzle())
         GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
     })
 

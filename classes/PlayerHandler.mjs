@@ -113,4 +113,7 @@ export class PlayerHandler{
         }
         return players
     }
+    resetScoresToZero(){
+        this.players.forEach(player => player.setScore(0))
+    }
 }
