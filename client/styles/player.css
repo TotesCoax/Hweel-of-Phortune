@@ -1,0 +1,38 @@
+/* Player Stuff */
+
+#playerContainer {
+    grid-area: players;
+    background-color: pink;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.player-tile {
+    width: 20%;
+    border-radius: 1vw;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.player-tile.active {
+    border: 5px black solid;
+}
+
+.player-tile p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    margin: 0;
+}
+
+p.player-total-score {
+    font-size: 1rem;
+}
+
+.player-tile.disconnected {
+    opacity: .5;
+}

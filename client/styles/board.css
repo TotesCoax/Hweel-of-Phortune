@@ -1,0 +1,42 @@
+/* Board stuff */
+#mainBoard {
+    background-color: green;
+    grid-area: board;
+    display: grid;
+    grid: repeat(4, 1fr) / repeat(12, 1fr);
+    gap: 1%;
+    aspect-ratio: 2/1;
+}
+
+#mainBoard p:not(.processed){
+    background-color: red;
+}
+
+#mainBoard div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgreen;
+    /* aspect-ratio: 1/1.5; */
+}
+
+#mainBoard div.game-space {
+    background-color: white;
+}
+
+#mainBoard p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 7rem;
+    margin: 0;
+}
+
+#mainBoard p {
+    display: none;
+}
+
+#mainBoard p.revealed {
+    border-radius: 10%;
+    display: block;
+}

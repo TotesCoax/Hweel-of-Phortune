@@ -1,0 +1,126 @@
+/* Wheel Stuff */
+
+#wheelHolder {
+    grid-area: wheel;
+    display: flex;
+    justify-content: left;
+    position: relative;
+    left: 4%;
+}
+
+#wheelContainer {
+    aspect-ratio: 1/1;
+    background-color: silver;
+    border-radius: 50%;
+    border: 5px solid black;
+    overflow: hidden;
+    transform: rotate(0deg);
+}
+
+#wheelIndicator {
+    height: 10%;
+    width: 5%;
+    background-color: red;
+    clip-path: polygon(
+        0% 20%,
+        60% 20%,
+        60% 0%,
+        100% 50%,
+        60% 100%,
+        60% 80%,
+        0% 80%
+        );
+    position: absolute;
+    top: 50%;
+    left: -4%;
+}
+
+
+.wheel-section:nth-child(even){
+    background-color: lightblue;
+}
+
+#wheelContainer.spinning {
+    animation: wheelSpin 3s ease-out;
+}
+
+.wheel-section.flashing {
+    animation-name: wheelFlash;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+}
+
+
+
+@keyframes wheelSpin {
+    from {
+        transform: rotate(var(--starting-degree));
+    }
+    to {
+        transform: rotate(var(--spin-degree));
+    }
+}
+
+@keyframes wheelFlash {
+    0% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    10% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    20% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    30% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    40% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    50% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    60% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    70% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    80% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    90% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 1);
+    }
+}
+
+.wheel-section {
+    height: 50%;
+    width: 13%;
+    position: absolute;
+    clip-path: polygon(100% 0, 50% 100%, 0 0);
+    transform: translateX(-50%);
+    transform-origin: bottom;
+    left: 44%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: clip;
+    text-indent: 5%;
+}
+
+.wheel-text {
+    font-size: 1.25em;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: black;
+    text-align: center;
+    writing-mode: vertical-lr;
+    /* text-orientation: upright; */
+    text-wrap: nowrap;
+    margin: 0;
+    padding-top: 5%;
+}
