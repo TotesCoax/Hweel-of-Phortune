@@ -124,7 +124,9 @@ function renderPlayerTiles(playersArray, turnIndex){
         let playerTile = createPlayerTile(player)
         playerContainer.append(playerTile)
     })
-    playerContainer.children[turnIndex].classList.add('active')
+    if (playerContainer.children.length > 0){
+        playerContainer.children[turnIndex].classList.add('active')
+    }
 }
 
 /**
@@ -135,11 +137,13 @@ function renderPlayerTiles(playersArray, turnIndex){
 function createPlayerTile(playerData){
     let containerEl = document.createElement('div'),
         nameEl = document.createElement('p'),
-        scoreEl = document.createElement('p')
+        scoreEl = document.createElement('p'),
+        totalScoreEl = document.createElement('p')
 
         containerEl.classList.add('player-tile')
         nameEl.classList.add('player-name')
         scoreEl.classList.add('player-score')
+        totalScoreEl.classList.add('player-total-score')
 
         if (!playerData.isConnected){
             containerEl.classList.add('disconnected')
@@ -148,6 +152,7 @@ function createPlayerTile(playerData){
         containerEl.style.backgroundColor = playerData.color
         nameEl.innerText = playerData.name
         scoreEl.innerText = playerData.score
+        scoreEl.innerText = playerData.totalScore
         
         if (getBrightness(playerData.color) < 127){
             nameEl.style.color = "white"
@@ -156,7 +161,7 @@ function createPlayerTile(playerData){
 
         
 
-        containerEl.append(nameEl, scoreEl)
+        containerEl.append(nameEl, scoreEl, totalScoreEl)
 
         return containerEl
 }
@@ -303,7 +308,7 @@ function hexToRGB(h) {
 
 // spinWheel(450)
 
-//Game Actions
+    // Game Actions
 
 const guessForm = document.getElementById('guessForm')
 const guessInput = document.getElementById('guessInput')
@@ -319,6 +324,16 @@ function handleGuessSubmission(e){
     let letter = guessInput.value
     socket.emit(EventCode.letterSubmission, letter)
     guessInput.value = ''
+}
+
+    // Solve
+
+const solveButton = document.getElementById('solveButton')
+
+solveButton.addEventListener('click', handleSolve)
+
+function handleSolve(){
+    socket.emit('revealPuzzle', "Show me the money")
 }
 
 //Admin Menus

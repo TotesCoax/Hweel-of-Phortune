@@ -153,6 +153,15 @@ export class Board{
     letterAlreadyGuessed(guessLetter){
         return this.guessedLetters.findIndex(letter => letter === guessLetter) >= 0
     }
+    revealAllLetters(){
+        this.board.forEach(row => {
+            row.forEach(space =>{
+                if (space.isLetter){
+                    space.revealLetter()
+                }
+            })
+        })
+    }
 }
 
 // module.exports = { Board }

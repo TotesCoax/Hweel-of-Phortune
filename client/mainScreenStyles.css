@@ -259,6 +259,10 @@
     margin: 0;
 }
 
+.player-total-score {
+    font-size: 1rem;
+}
+
 .player-tile.disconnected {
     opacity: .5;
 }

@@ -44,6 +44,11 @@ GameServer.io.on(EventCode.connection, (socket) => {
         // The server sends a copy of the game state to the board.
         callback(WOF.getGamestate())
     })
+    // Solve the puzzle
+    socket.on('revealPuzzle', () => {
+        WOF.solvedPuzzle()
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    })
     // Direct to player message
     socket.on('yourTurn', (idFromHandler) => {
         socket.to(idFromHandler).emit('yourTurn', "You're up, dingus.")

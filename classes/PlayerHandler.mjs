@@ -87,7 +87,7 @@ export class PlayerHandler{
         return this.players[this.getPlayerIndex(playerId)]
     }
     getPlayersSortedByScore(){
-        return this.players.toSorted((a, b) => a.score - b.score)
+        return this.players.toSorted((a, b) => a.totalScore - b.totalScore)
     }
     /**
      * 
@@ -114,5 +114,3 @@ export class PlayerHandler{
         return players
     }
 }
-
-// module.exports = { PlayerHandler }

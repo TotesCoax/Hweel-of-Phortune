@@ -182,6 +182,11 @@ export class WOFGame{
         return this.Wheel.spinWheel(speedValue)
     }
 
+    solvedPuzzle(){
+        this.Board.revealAllLetters()
+        this.PlayerHandler.getCurrentPlayer().saveRoundScoretoTotalScore()
+    }
+
     createTestEnvironment(){
         console.log('Creating Test players')
         this.PlayerHandler.addPlayer('aaaa', '1111')

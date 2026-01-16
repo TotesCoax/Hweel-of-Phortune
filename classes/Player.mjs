@@ -8,6 +8,7 @@ export class Player{
         this.gameID = gameID
         this.name = defaultName
         this.score = 0
+        this.totalScore = 0
         this.color = '#FFF'
         this.socketID = socketID
         this.isConnected = true
@@ -43,6 +44,15 @@ export class Player{
     }
     setConnectedStatus(boolean){
         this.isConnected = boolean
+    }
+    updateTotalScore(amt){
+        this.totalScore += amt
+    }
+    setTotalScore(amt){
+        this.totalScore = amt
+    }
+    saveRoundScoretoTotalScore(){
+        this.totalScore += this.score
     }
 }
 

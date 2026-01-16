@@ -1,7 +1,7 @@
 export class Letter{
     constructor(char){
         this.character = ''
-        this.revealed = false
+        this.isRevealed = false
         this.isVowel = false
         this.isLetter = false
         this.isPunc = false
@@ -22,7 +22,7 @@ export class Letter{
         this.isVowel = this.setVowel()
         this.isPunc = this.setPunc()
         if(this.isPunc){
-            this.revealed = true
+            this.isRevealed = true
         }
         if(this.isLetter || this.isPunc){
             this.isSpace = true
@@ -53,7 +53,7 @@ export class Letter{
         return '.,\'\"?!&'.toUpperCase().includes(this.character)
     }
     revealLetter(){
-        this.revealed = true
+        this.isRevealed = true
     }
 }
 
