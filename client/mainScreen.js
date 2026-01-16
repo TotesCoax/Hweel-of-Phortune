@@ -47,7 +47,7 @@ function clearChildren(element){
 /**
  * @typedef {object} Letter
  * @property {string} character
- * @property {boolean} revealed
+ * @property {boolean} isRevealed
  * @property {boolean} isVowel
  * @property {boolean} isLetter
  * @property {boolean} isPunc
@@ -69,7 +69,7 @@ function renderBoard(arrayByLetter){
                 holder.classList.add('game-space')               
             }
             letter.innerText = col.character
-            if (col.revealed){
+            if (col.isRevealed){
                 letter.classList.add('revealed')
             }
             letter.classList.add('processed')
@@ -152,7 +152,7 @@ function createPlayerTile(playerData){
         containerEl.style.backgroundColor = playerData.color
         nameEl.innerText = playerData.name
         scoreEl.innerText = playerData.score
-        scoreEl.innerText = playerData.totalScore
+        totalScoreEl.innerText = playerData.totalScore
         
         if (getBrightness(playerData.color) < 127){
             nameEl.style.color = "white"
