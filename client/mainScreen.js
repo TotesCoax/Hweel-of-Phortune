@@ -192,7 +192,7 @@ function renderWheel(wheelObject){
         index++
     })
     // spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
-    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 81)*-1}deg)`
+    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 90)*-1}deg)`
 }
 /**
  * 
@@ -256,7 +256,7 @@ socket.on('wheelSpin', spinWheel)
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
-    let offset = 81
+    let offset = 90
     console.log(dataFromServer)
     setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
     wheelContainer.addEventListener('animationend', () => {
