@@ -245,6 +245,9 @@
     width: 20%;
     border-radius: 1vw;
     background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .player-tile.active {
@@ -259,7 +262,7 @@
     margin: 0;
 }
 
-.player-total-score {
+p.player-total-score {
     font-size: 1rem;
 }
 
