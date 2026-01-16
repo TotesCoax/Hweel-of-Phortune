@@ -20,7 +20,7 @@ export class Wheel{
         for (let index = 0; index < requiredNumbers; index++) {
             sectionValues.push(this.getRandomValue(this.minValue, this.maxValue))
         }
-        sectionValues.push(bonusValue, 'bankrupt', 'lose a turn', 'lose a turn2')
+        sectionValues.push(bonusValue, 'bankrupt', 'lose a turn', 'lose a turn')
         this.sections = sectionValues
         this.shuffleSections()
         this.sectionWidthInDeg = 360 / this.sections.length
@@ -86,12 +86,12 @@ export class Wheel{
     }
     /**
      * 
-     * @returns {number} returns 0 if it's not a scoring space, just in case.
+     * @returns {number|string}
      */
     getWheelValue(){
         let reading = this.sections[this.getWheelIndex()]
-        // console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
-        return !Number.isNaN(reading)? reading : 0
+        console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
+        return reading
     }
 }
 

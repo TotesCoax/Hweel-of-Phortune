@@ -91,6 +91,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
             endingDeg = WOF.Wheel.currentDeg,
             wheelIndex = WOF.Wheel.getWheelIndex()
         console.log(`Current Value: ${WOF.Wheel.getWheelValue()}, SpinValue: ${spinValue}`)
+        WOF.handleSpecialSpace(WOF.Wheel.getWheelValue())
         console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
         let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
         console.log(spinData)
@@ -131,6 +132,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
                 endingDeg = WOF.Wheel.currentDeg,
                 wheelIndex = WOF.Wheel.getWheelIndex()
             console.log(`Current Value: ${WOF.Wheel.getWheelValue()}`)
+            WOF.handleSpecialSpace(WOF.Wheel.getWheelValue())
             console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
             let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
             console.log(spinData)

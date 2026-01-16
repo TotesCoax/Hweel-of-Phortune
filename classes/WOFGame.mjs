@@ -94,6 +94,13 @@ export class WOFGame{
     handleGuess(guess, playerID){
         let letter = new Letter(guess),
             player = this.PlayerHandler.getPlayer(playerID)
+
+        if (Number.isNaN(this.Wheel.getWheelValue())){
+            this.handleSpecialSpace(wheelValue)
+            return false
+        }
+
+
         if (letter.isVowel){
             console.log('Vowel found')
             return this.handleVowel(letter, player)
@@ -104,6 +111,23 @@ export class WOFGame{
         }
         return false
     }
+
+    handleSpecialSpace(value){
+        console.log(`Special space: ${value}`)
+        switch (value) {
+            case 'bankrupt':
+                this.PlayerHandler.getCurrentPlayer().setScore(0)
+                this.PlayerHandler.advanceTurn()
+                break;
+            case 'lose a turn':
+                this.PlayerHandler.advanceTurn()
+                break;
+        
+            default:
+                break;
+        }
+    }
+
     /**
      * 
      * @param {Letter} letter 
