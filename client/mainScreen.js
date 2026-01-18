@@ -157,6 +157,7 @@ function createPlayerTile(playerData){
         if (getBrightness(playerData.color) < 127){
             nameEl.style.color = "white"
             scoreEl.style.color = "white"
+            totalScoreEl.style.color = "white"
         }
 
         

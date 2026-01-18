@@ -12,6 +12,7 @@ export class Player{
         this.color = '#FFF'
         this.socketID = socketID
         this.isConnected = true
+        this.isActive = false
     }
     /**
      * Increments the score for player.

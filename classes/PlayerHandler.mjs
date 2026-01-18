@@ -22,6 +22,7 @@ export class PlayerHandler{
             return
         }
         this.turnIndicator++
+        this.setActivePlayer()
     }
     retreatTurn(){
         if(this.turnIndicator - 1 <= this.players.length){
@@ -29,6 +30,7 @@ export class PlayerHandler{
             return
         }
         this.turnIndicator--
+        this.setActivePlayer()
     }
     getCurrentPlayer(){
         return this.players[this.turnIndicator]
@@ -74,7 +76,7 @@ export class PlayerHandler{
         return this.getPlayerIndex(id) >= 0
     }
     isActivePlayer(id){
-        return this.getPlayerIndex(id) == this.turnIndicator
+        return this.getPlayer(id).isActive
     }
     getPlayerIndex(playerId){
         let index = this.players.findIndex(seat => seat.gameID === playerId)
@@ -115,5 +117,9 @@ export class PlayerHandler{
     }
     resetScoresToZero(){
         this.players.forEach(player => player.setScore(0))
+    }
+    setActivePlayer(){
+        this.players.forEach(player => player.isActive = false)
+        this.players[this.turnIndicator].isActive = true
     }
 }
