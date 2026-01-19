@@ -193,7 +193,7 @@ function renderWheel(wheelObject){
         index++
     })
     // spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
-    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 90)*-1}deg)`
+    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 0)*-1}deg)`
 }
 /**
  * 
@@ -257,7 +257,7 @@ socket.on('wheelSpin', spinWheel)
  * @param {SpinData} dataFromServer power value sent down from the server. 
  */
 function spinWheel(dataFromServer){
-    let offset = 90
+    let offset = 0
     console.log(dataFromServer)
     setSpinAnim(dataFromServer.start, dataFromServer.power + offset, dataFromServer.end + offset)
     wheelContainer.addEventListener('animationend', () => {
@@ -366,10 +366,6 @@ gameFileButton.addEventListener('click', () => {
 
     Reader.addEventListener('load', () => {
         const csv = Reader.result
-        // const arrayFromCSV =  csv.split('\r\n').map((line) => {
-        //     // Split on commas outside of quotes
-        //     return line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/)
-        // })
         console.table(csv)
         socket.emit('gameFile', csv)
     })

@@ -98,18 +98,14 @@
 }
 
 .wheel-section {
-    height: 50%;
-    width: 13%;
+    height: 13%;
+    width: 50%;
     position: absolute;
-    clip-path: polygon(100% 0, 50% 100%, 0 0);
-    transform: translateX(-50%);
-    transform-origin: bottom;
-    left: 44%;
+    clip-path: polygon(100% 50%, 0% 100%, 0 0);
+    transform-origin: 100% 50%;
+    translate: 0% 333%;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    overflow: clip;
-    text-indent: 5%;
+    align-items: center;
 }
 
 .wheel-text {
@@ -117,10 +113,7 @@
     font-weight: bold;
     font-family: sans-serif;
     color: black;
-    text-align: center;
-    writing-mode: vertical-lr;
-    /* text-orientation: upright; */
     text-wrap: nowrap;
     margin: 0;
-    padding-top: 5%;
+    padding-left: 3%;
 }
