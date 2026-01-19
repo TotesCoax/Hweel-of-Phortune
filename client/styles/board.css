@@ -4,8 +4,7 @@
     grid-area: board;
     display: grid;
     grid: repeat(4, 1fr) / repeat(12, 1fr);
-    gap: 1%;
-    aspect-ratio: 2/1;
+    gap: 1% .5%;
 }
 
 #mainBoard p:not(.processed){
@@ -17,7 +16,6 @@
     align-items: center;
     justify-content: center;
     background-color: lightgreen;
-    /* aspect-ratio: 1/1.5; */
 }
 
 #mainBoard div.game-space {
