@@ -45,12 +45,6 @@ export class WheelRender {
              wheelContainerDiv.append(newDiv)
         })
 
-        this.wheelElement.append(wheelContainerDiv, wheelIndicator)
-    }
-    renderIndicator(){
-        let indicatorDiv = document.createElement('div')
-        indicatorDiv.id = 'wheelIndicator'
-
-        return indicatorDiv
+        this.wheelElement.append(wheelContainerDiv)
     }
 }
