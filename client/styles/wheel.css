@@ -13,7 +13,7 @@
     aspect-ratio: 1/1;
     background-color: var(--gold);
     border-radius: 50%;
-    border: 5px solid black;
+    border: 5px solid var(--gold);
     overflow: hidden;
 }
 
@@ -32,7 +32,7 @@
         );
     position: absolute;
     top: 50%;
-    left: -3%;
+    left: -4%;
 }
 
 
@@ -50,9 +50,9 @@
 
 .wheel-section.flashing {
     animation-name: wheelFlash;
-    animation-duration: 2s;
+    animation-duration: .2s;
     animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 12;
 }
 
 .wheel-section {
@@ -64,6 +64,8 @@
     translate: 0% 333%;
     display: flex;
     align-items: center;
+    border: 3px solid var(--silver);
+    box-sizing: border-box;
 }
 
 .wheel-text {
@@ -86,37 +88,10 @@
 }
 
 @keyframes wheelFlash {
-    0% {
+    from {
         background-color: rgba(255, 255, 255, 1);
     }
-    10% {
+    to {
         background-color: rgba(255, 255, 255, 0);
-    }
-    20% {
-        background-color: rgba(255, 255, 255, 1);
-    }
-    30% {
-        background-color: rgba(255, 255, 255, 0);
-    }
-    40% {
-        background-color: rgba(255, 255, 255, 1);
-    }
-    50% {
-        background-color: rgba(255, 255, 255, 0);
-    }
-    60% {
-        background-color: rgba(255, 255, 255, 1);
-    }
-    70% {
-        background-color: rgba(255, 255, 255, 0);
-    }
-    80% {
-        background-color: rgba(255, 255, 255, 1);
-    }
-    90% {
-        background-color: rgba(255, 255, 255, 0);
-    }
-    100% {
-        background-color: rgba(255, 255, 255, 1);
     }
 }

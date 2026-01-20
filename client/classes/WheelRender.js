@@ -33,6 +33,7 @@ export class WheelRender {
 
         textP.classList.add('wheel-text')
         textP.innerText = text
+        textP.innerText = textP.innerText.toUpperCase()
 
         wheelDiv.append(textP)
 

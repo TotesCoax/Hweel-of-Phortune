@@ -78,7 +78,7 @@ function setFlashingSection(index){
     let wheelSections = document.querySelectorAll('.wheel-section'),
         currentSection = wheelSections[index]
     currentSection.addEventListener('animationend', () => {
-        // currentSection.classList.remove('flashing')
+        currentSection.classList.remove('flashing')
         gameStateRequest()
     }, {once: true})
     currentSection.classList.add('flashing')
