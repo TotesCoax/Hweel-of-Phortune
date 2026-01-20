@@ -3,21 +3,23 @@
  * @import { Letter } from '../../classes/Letter.mjs'
  */
 
+/**
+ * A class to assist with rendering Rouletters Board
+ */
 export class RouletterBoardRender {
     /**
      * 
-     * @param {string} containerHook - id for board div to target
+     * @param {string} puzzleHook - id for board div to target
      * @param {string} clueHook - id for clue container
+     * @param {string} guessedHook - id for guessed letters container
      */
-    constructor(puzzleHook, clueHook){
-        /**
-         * @type {HTMLDivElement}
-         */
+    constructor(puzzleHook, clueHook, guessedHook){
+        /**@type {HTMLDivElement}*/
         this.boardElement = document.getElementById(puzzleHook)
-        /**
-         * @type {HTMLDivElement}
-         */
+        /**@type {HTMLDivElement}*/
         this.clueElement = document.getElementById(clueHook)
+        /**@type {HTMLDivElement}*/
+        this.guessedElement = document.getElementById(guessedHook)
     }
     /**
      * 
@@ -25,7 +27,7 @@ export class RouletterBoardRender {
      */
     clearChildren(element){
         while (element.firstChild){
-            element.lastChild
+            element.lastChild.remove()
         }
     }
     /**
@@ -35,6 +37,8 @@ export class RouletterBoardRender {
     renderSpace(data){
         let tdHolder = document.createElement('td'),
             letterEL = document.createElement('p')
+
+        letterEL.innerText = '#'
 
         if (data.isSpace){
             tdHolder.classList.add('game-space')
@@ -70,21 +74,37 @@ export class RouletterBoardRender {
             let newRow = this.renderRow(row)
             boardTable.append(newRow)
         })
-        let clueEL = this.renderClue()
-        this.boardElement.append(clueEL,boardTable)
+        this.boardElement.append(boardTable)
     }
     /**
      * 
      * @param {string} text 
-     * @returns 
      */
     renderClue(text){
         this.clearChildren(this.clueElement)
-        let clueTableCap = document.createElement('caption'),
+        let clueDiv = document.createElement('div'),
             cluePEL = document.createElement('p')
         
         cluePEL.innerText = text
-        clueTableCap.append(cluePEL)
-        return clueTableCap
+        clueDiv.append(cluePEL)
+        this.clueElement.append(clueDiv)
+    }
+    /**
+     * 
+     * @param {string[]} arrayOfChars 
+     */
+    renderGuessedLetters(arrayOfChars){
+        this.clearChildren(this.guessedElement)
+        let lettersEL = document.createElement('p'),
+            title = document.createElement('h6')
+
+        title.innerText = "Guessed Letters:"
+
+        arrayOfChars.forEach(letter =>{
+            let newSpan = document.createElement('span')
+            newSpan.innerText = letter
+            lettersEL.append(newSpan)
+        })
+        this.guessedElement.append(title, lettersEL)
     }
 }

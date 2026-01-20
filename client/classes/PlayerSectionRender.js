@@ -3,6 +3,9 @@
  * @import { PlayerHandler } from '../../classes/PlayerHandler.mjs'
  */
 
+/**
+ * A Class to assist with rendering a current player list.
+ */
 export class PlayerSectionRender {
     /**
      * 
@@ -16,7 +19,7 @@ export class PlayerSectionRender {
     }
     clearChildren(){
         while (this.playerSection.firstChild){
-            this.playerSection.lastChild
+            this.playerSection.lastChild.remove()
         }
     }
     /**
@@ -26,7 +29,7 @@ export class PlayerSectionRender {
     renderPlayerSection(data){
         this.clearChildren()
         data.players.forEach(player => {
-            let playerTile = this.renderPlayerTile()
+            let playerTile = this.renderPlayerTile(player)
             this.playerSection.append(playerTile)
         })
     }
@@ -42,7 +45,7 @@ export class PlayerSectionRender {
 
         playerContainerDiv.classList.add('player-tile')
         playerContainerDiv.style.backgroundColor = data.color
-        if (data.isConnected){
+        if (!data.isConnected){
             playerContainerDiv.classList.add('disconnected')
         }
         if (data.isActive){
@@ -89,7 +92,7 @@ export class PlayerSectionRender {
         return {'red': +r, 'green': +g, 'blue': +b}
     }
     getBrightness(hex){
-        let rgb = hexToRGB(hex)
+        let rgb = this.hexToRGB(hex)
 
         return 0.2126 * rgb.red + 0.7152 * rgb.green + 0.0722 * rgb.blue
     }

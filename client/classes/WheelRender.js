@@ -2,6 +2,9 @@
  * @import { Wheel } from '../../classes/Wheel.mjs
  */
 
+/**
+ * A Class to assist with rendering a circular wheel.
+ */
 export class WheelRender {
     /**
      * 
@@ -13,9 +16,14 @@ export class WheelRender {
          */
         this.wheelElement = document.getElementById(containerHook)
     }
+    clearChildren(){
+        while (this.wheelElement.firstChild){
+            this.wheelElement.lastChild.remove()
+        }
+    }
     /**
      * 
-     * @param {string} text - the text you want int he wheel
+     * @param {string} text - the text you want in the wheel section
      */
     createWheelSection(text){
         let wheelDiv = document.createElement('div'),
@@ -32,19 +40,32 @@ export class WheelRender {
     }
     /**
      * 
-     * @param {number[]|string[]} sectionsArray 
+     * @param {Wheel} wheelObj - wheel object
      */
-    renderWheel(sectionsArray){
-        let wheelContainerDiv = document.createElement('div'),
-            wheelIndicator = this.renderIndicator()
+    renderWheel(wheelObj){
+        this.clearChildren()
+        // let wheelContainerDiv = document.createElement('div')
 
-        wheelContainerDiv.classList.add('wheel-container')
+        // wheelContainerDiv.id = 'wheelContainer'
 
-        sectionsArray.forEach(section => {
+        wheelObj.sections.forEach(section => {
              let newDiv = this.createWheelSection(section)
-             wheelContainerDiv.append(newDiv)
+             this.wheelElement.append(newDiv)
         })
 
-        this.wheelElement.append(wheelContainerDiv)
+        this.wheelElement.style.rotate = `-${wheelObj.currentDeg}deg`
+
+        // this.wheelElement.append(wheelContainerDiv)
+        this.arrangeWheelSections()
+    }
+    arrangeWheelSections(){
+        let sections = document.querySelectorAll('.wheel-section'),
+            degreeIncrement = 0,
+            degreeStep = 360 / sections.length
+
+        sections.forEach(section => {
+            section.style.rotate = `${degreeIncrement * degreeStep}deg`
+            degreeIncrement++
+        })
     }
 }

@@ -11,8 +11,6 @@ const __dirname = path.dirname(__filename)
 // Game imports
 import { WOFGame } from './classes/WOFGame.mjs'
 import { CSVParser } from './classes/CSVParser.mjs'
-import { BasicQueue } from './classes/BasicQueue.mjs'
-import { BoardQueue } from './classes/BoardQueue.mjs'
 
 const GameServer = new LocallyConnectedServer('client')
 
@@ -164,7 +162,7 @@ GameServer.app.get('/player', (req, res) => {
 })
 
 GameServer.app.get('/board', (req, res) => {
-    res.sendFile(__dirname + '/client/mainScreen.html')
+    res.sendFile(__dirname + '/client/mainScreen_copy.html')
 })
 
 // Spin up the server

@@ -178,7 +178,7 @@ function arrangeWheelSections(){
     
     sections.forEach(section => {
         // console.log(section, degreeIncrement)
-        section.style.transform = `rotate(${degreeIncrement}deg)`
+        section.style.rotate = `${degreeIncrement}deg`
         degreeIncrement += 15
     })
 }
@@ -193,7 +193,7 @@ function renderWheel(wheelObject){
         index++
     })
     // spinWheel({start: wheelObject.currentDeg - 81, power: 81, end: wheelObject.currentDeg, index: Math.floor(wheelObject.currentDeg/wheelObject.sectionWidthInDeg)})
-    wheelContainer.style.transform = `rotate(${(wheelObject.currentDeg + 0)*-1}deg)`
+    wheelContainer.style.rotate = `${(wheelObject.currentDeg + 0)*-1}deg`
 }
 /**
  * 
@@ -221,7 +221,7 @@ let wheelContainer = document.getElementById('wheelContainer')
 function resetCurrentDeg(){
     console.log('Wheel Resetting to: ', getComputedStyle(document.documentElement).getPropertyValue('--ending-degree'))
     let newStarting = getComputedStyle(document.documentElement).getPropertyValue('--ending-degree')
-    wheelContainer.style.transform = `rotate(${newStarting})`
+    wheelContainer.style.rotate = `${newStarting}`
     wheelContainer.classList.remove('spinning')
     console.log('Wheel Reset to: ', wheelContainer.style)
 }

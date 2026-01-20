@@ -1,5 +1,6 @@
-/* Wheel Stuff */
+@import url('./colors.css');
 
+/* Wheel Stuff */
 #wheelHolder {
     grid-area: wheel;
     display: flex;
@@ -10,17 +11,16 @@
 
 #wheelContainer {
     aspect-ratio: 1/1;
-    background-color: silver;
+    background-color: var(--gold);
     border-radius: 50%;
     border: 5px solid black;
     overflow: hidden;
-    transform: rotate(0deg);
 }
 
 #wheelIndicator {
     height: 10%;
     width: 5%;
-    background-color: red;
+    background-color: var(--white);
     clip-path: polygon(
         0% 20%,
         60% 20%,
@@ -32,12 +32,16 @@
         );
     position: absolute;
     top: 50%;
-    left: -4%;
+    left: -3%;
 }
 
 
+.wheel-section {
+    background-color: var(--red);
+}
+
 .wheel-section:nth-child(even){
-    background-color: lightblue;
+    background-color: var(--black);
 }
 
 #wheelContainer.spinning {
@@ -48,16 +52,36 @@
     animation-name: wheelFlash;
     animation-duration: 2s;
     animation-timing-function: linear;
+    animation-iteration-count: infinite;
 }
 
+.wheel-section {
+    height: 13%;
+    width: 50%;
+    position: absolute;
+    clip-path: polygon(0% 0%, 80% 40%, 80% 60%, 0% 100%);
+    transform-origin: 100% 50%;
+    translate: 0% 333%;
+    display: flex;
+    align-items: center;
+}
 
+.wheel-text {
+    font-size: 1.25em;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: var(--white);
+    text-wrap: nowrap;
+    margin: 0;
+    padding-left: 5%;
+}
 
 @keyframes wheelSpin {
     from {
-        transform: rotate(var(--starting-degree));
+        rotate: var(--starting-degree);
     }
     to {
-        transform: rotate(var(--spin-degree));
+        rotate: var(--spin-degree);
     }
 }
 
@@ -95,25 +119,4 @@
     100% {
         background-color: rgba(255, 255, 255, 1);
     }
-}
-
-.wheel-section {
-    height: 13%;
-    width: 50%;
-    position: absolute;
-    clip-path: polygon(100% 50%, 0% 100%, 0 0);
-    transform-origin: 100% 50%;
-    translate: 0% 333%;
-    display: flex;
-    align-items: center;
-}
-
-.wheel-text {
-    font-size: 1.25em;
-    font-weight: bold;
-    font-family: sans-serif;
-    color: black;
-    text-wrap: nowrap;
-    margin: 0;
-    padding-left: 3%;
 }
