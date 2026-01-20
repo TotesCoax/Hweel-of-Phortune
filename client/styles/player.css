@@ -2,7 +2,6 @@
 
 #playerContainer {
     grid-area: players;
-    background-color: pink;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;

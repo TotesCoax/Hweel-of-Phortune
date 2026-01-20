@@ -6,7 +6,6 @@
     display: flex;
     justify-content: left;
     position: relative;
-    left: 4%;
 }
 
 #wheelContainer {
@@ -15,6 +14,8 @@
     border-radius: 50%;
     border: 5px solid var(--gold);
     overflow: hidden;
+    position: relative;
+    left: 4%;
 }
 
 #wheelIndicator {
@@ -31,8 +32,7 @@
         0% 80%
         );
     position: absolute;
-    top: 50%;
-    left: -4%;
+    top: 51%;
 }
 
 
@@ -64,18 +64,16 @@
     translate: 0% 333%;
     display: flex;
     align-items: center;
-    border: 3px solid var(--silver);
-    box-sizing: border-box;
 }
 
 .wheel-text {
     font-size: 1.25em;
     font-weight: bold;
-    font-family: sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: var(--white);
     text-wrap: nowrap;
     margin: 0;
-    padding-left: 5%;
+    padding-left: 3%;
 }
 
 @keyframes wheelSpin {

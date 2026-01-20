@@ -4,7 +4,7 @@
     display: flex;
     grid-area: title;
     width: 100vw;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 #gameTitle {

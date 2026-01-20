@@ -38,8 +38,6 @@ export class RouletterBoardRender {
         let tdHolder = document.createElement('td'),
             letterEL = document.createElement('p')
 
-        letterEL.innerText = '#'
-
         if (data.isSpace){
             tdHolder.classList.add('game-space')
         }
@@ -82,12 +80,10 @@ export class RouletterBoardRender {
      */
     renderClue(text){
         this.clearChildren(this.clueElement)
-        let clueDiv = document.createElement('div'),
-            cluePEL = document.createElement('p')
+        let cluePEL = document.createElement('p')
         
         cluePEL.innerText = text
-        clueDiv.append(cluePEL)
-        this.clueElement.append(clueDiv)
+        this.clueElement.append(cluePEL)
     }
     /**
      * 
