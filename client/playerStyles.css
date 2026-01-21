@@ -1,3 +1,9 @@
+html, body, #scrollPowerContainer {
+    margin: 0;
+    overscroll-behavior: none;
+}
+
+
 #controllerContainer {
     display: flex;
 }

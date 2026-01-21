@@ -93,8 +93,8 @@ function calculateScrollSpeedInterval(){
 // Scroll Meter Sizing
 function resizePowerBar(){
   let powerBar = document.getElementById("powerBar"),
-      viewportHeight = window.innerHeight,
-      containerHeight = Math.round(viewportHeight * .95),
+      viewportHeight = window.outerHeight,
+      containerHeight = Math.round(viewportHeight),
       barTotalHeight = Math.round(containerHeight * 2.0),
       blackRatio = Math.round((containerHeight/barTotalHeight)*100),
       colorFactor = Math.round((100 - blackRatio)/3)
