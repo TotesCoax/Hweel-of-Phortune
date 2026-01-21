@@ -121,6 +121,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
         // Add them to the players channel
         socket.join('players')
         console.table(WOF.PlayerHandler.players)
+        WOF.PlayerHandler.setActivePlayer()
         console.log(`Player joined room`)
     })
     
@@ -128,7 +129,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on(EventCode.speedData, (data) => {
         console.log(data)
         // Check if the player is the active player, ignore all other submissions (let the players have freedom to fiddle with it)
-        // if(WOF.PlayerHandler.isActivePlayer(data.id)){
+        if(WOF.PlayerHandler.isActivePlayer(data.id)){
             let startingDeg = WOF.Wheel.currentDeg,
                 spinPower = WOF.spinWheel(data.value),
                 endingDeg = WOF.Wheel.currentDeg,
@@ -139,7 +140,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
             let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
             console.log(spinData)
             GameServer.io.to('board').emit('wheelSpin', spinData)
-        // }
+        }
     })
     socket.on(EventCode.nameChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
@@ -162,7 +163,7 @@ GameServer.app.get('/player', (req, res) => {
 })
 
 GameServer.app.get('/board', (req, res) => {
-    res.sendFile(__dirname + '/client/mainScreen_copy.html')
+    res.sendFile(__dirname + '/client/mainScreen.html')
 })
 
 // Spin up the server
