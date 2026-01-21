@@ -76,7 +76,6 @@ export class PlayerHandler{
         return this.getPlayerIndex(id) >= 0
     }
     isActivePlayer(id){
-        console.log(id, this.getPlayer(id))
         return this.getPlayer(id).isActive
     }
     getPlayerIndex(playerId){

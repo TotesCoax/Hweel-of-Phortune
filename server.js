@@ -18,13 +18,9 @@ const GameServer = new LocallyConnectedServer('client')
 GameServer.io.on(EventCode.connection, (socket) => {
     console.log("It appears we have a visitor. Put on the tea.", socket.id)
     socket.on(EventCode.disconnect, (reason) => {
-        // player.leave('players')
         console.log(WOF.PlayerHandler.getPlayer(socket.id))
-        if (WOF.PlayerHandler.getPlayer(socket.id)){
-            WOF.PlayerHandler.getPlayer(socket.id).setConnectedStatus(false)
-            console.table(WOF.PlayerHandler.players)
-            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
-        }
+        WOF.handlePlayerDisconnect()
+        changeNotificationToBoard()
         console.log(`${socket.id} disconnected. Reason: ${reason}`)
     })
     // Board Events
@@ -45,29 +41,37 @@ GameServer.io.on(EventCode.connection, (socket) => {
     // Solve the puzzle
     socket.on('revealPuzzle', () => {
         WOF.solvedPuzzle()
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
     // Direct to player message
-    socket.on('yourTurn', (idFromHandler) => {
-        socket.to(idFromHandler).emit('yourTurn', "You're up, dingus.")
-    })
+    function notificationToActivePlayer(){
+        let currentPlayer = WOF.getSocketIDForActivePlayer()
+        socket.to(currentPlayer).emit('yourTurn', "You're up, dingus")
+    }
+    // Notice to Board screen that a change has occured and needs to rerender.
+    function changeNotificationToBoard(){
+        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+    }
+
     socket.on(EventCode.letterSubmission, (data) => {
         console.log(`${data, WOF.PlayerHandler.getCurrentPlayer().name}'s guess: ${data}`)
         WOF.playerGuess(data, WOF.PlayerHandler.getCurrentPlayer().gameID)
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
 
     socket.on('gameFile', (data) => {
         console.log(data)
         WOF.PuzzleQueue.populateQueue(CSVParser.csvToArray(data))
         WOF.createNewBoard(WOF.nextPuzzle())
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        notificationToActivePlayer()
+        changeNotificationToBoard()
     })
 
     socket.on('nextRound', (data) => {
         console.log(data)
         WOF.nextPuzzle()
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        notificationToActivePlayer()
+        changeNotificationToBoard()
     })
 
     //Manual Mode
@@ -76,13 +80,13 @@ GameServer.io.on(EventCode.connection, (socket) => {
         console.log(`Adding new player manually: ${data}`)
         WOF.PlayerHandler.addPlayer(data, 'manual')
         WOF.PlayerHandler.getPlayer(data).setName(data)
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
 
     socket.on('manualRemove', (data) => {
         console.log(`Removing player manually: ${data}`)
         let removed = WOF.PlayerHandler.removePlayer(data)
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
 
     socket.on('offlineSpin', (data) => {
@@ -109,13 +113,13 @@ GameServer.io.on(EventCode.connection, (socket) => {
             console.log(`Creating new player.`)
             let newPlayerID = makeID()
             WOF.PlayerHandler.addPlayer(newPlayerID, socket.id)
-            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+            changeNotificationToBoard()
             callback(WOF.PlayerHandler.getPlayer(newPlayerID))
         } else {
             // If the player exists, send them their player ID to confirm connection.
             console.log(WOF.PlayerHandler.getPlayer(id))
             WOF.PlayerHandler.getPlayer(id).setConnectedStatus(true)
-            GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+            changeNotificationToBoard()
             callback(WOF.PlayerHandler.getPlayer(id))
         }
         // Add them to the players channel
@@ -144,12 +148,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on(EventCode.nameChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setName(data.name)
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
     socket.on(EventCode.colorChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setColor(data.color)
-        GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
+        changeNotificationToBoard()
     })
     // Game Actions
     

@@ -194,6 +194,19 @@ export class WOFGame{
         this.PlayerHandler.getCurrentPlayer().saveRoundScoretoTotalScore()
     }
 
+    //Server Related
+
+    handlePlayerDisconnect(socketID){
+        if(this.PlayerHandler.getPlayer(socketID)){
+            this.PlayerHandler.getPlayer(socketID).setConnectedStatus(false)
+            console.table(this.PlayerHandler.players)
+        }
+    }
+
+    getSocketIDForActivePlayer(){
+        return this.PlayerHandler.getCurrentPlayer().socketID
+    }
+
     createTestEnvironment(){
         console.log('Creating Test players')
         this.PlayerHandler.addPlayer('aaaa', '1111')
