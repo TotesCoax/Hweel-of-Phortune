@@ -20,15 +20,19 @@ export class WOFGame{
      * @param {Player[]} players Array of players
      */
     constructor(clue, phrase, sections, players){
+        /** @type {Board} */
         this.Board = new Board(clue, phrase)
+        /** @type {Wheel} */
         this.Wheel = new Wheel(sections)
+        /** @type {PlayerHandler} */
         this.PlayerHandler = new PlayerHandler(players)
+        /** @type {boolean} */
         this.isWaitingForSpin = false
+        /** @type {boolean} */
         this.isWaitingForGuess = false
-        /**
-         * @type {BoardQueue}
-        */
+        /** @type {BoardQueue} */
        this.PuzzleQueue = new BoardQueue()
+       this.Board.revealAllLetters()
     }
 
     // Setup Functions
@@ -40,6 +44,7 @@ export class WOFGame{
     startNewRound(clue, phrase){
         this.createNewBoard(clue, phrase)
         this.PlayerHandler.resetScoresToZero()
+        this.PlayerHandler.setActivePlayer()
         // For now, let's not scale up point values
         this.Wheel.shuffleSections()
     }
@@ -172,6 +177,7 @@ export class WOFGame{
      * @returns {object}
      */
     getGamestate(){
+        this.PlayerHandler.setActivePlayer()
         return {
             Board: this.Board,
             Wheel: this.Wheel,
@@ -211,5 +217,3 @@ export class WOFGame{
 
 
 }
-
-// module.exports = { WOFGame }

@@ -121,7 +121,6 @@ GameServer.io.on(EventCode.connection, (socket) => {
         // Add them to the players channel
         socket.join('players')
         console.table(WOF.PlayerHandler.players)
-        WOF.PlayerHandler.setActivePlayer()
         console.log(`Player joined room`)
     })
     
