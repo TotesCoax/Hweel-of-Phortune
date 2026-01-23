@@ -184,9 +184,22 @@ export class WOFGame{
             PlayerHandler: this.PlayerHandler
         }
     }
-
+    /**
+     * 
+     * @param {number} speedValue 
+     * @returns {{start: number, power: number, end: number, index: number}}
+     */
     spinWheel(speedValue){
-        return this.Wheel.spinWheel(speedValue)
+        let startingDeg = this.Wheel.getCurrentDeg(),
+            spinPower = this.Wheel.spinWheel(speedValue),
+            endingDeg = this.Wheel.getCurrentDeg(),
+            wheelIndex = this.Wheel.getWheelIndex()
+        
+        console.log(`Current Value: ${this.Wheel.getWheelValue()}`)
+        this.handleSpecialSpace(this.Wheel.getWheelValue())
+        let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
+        console.table(spinData)
+        return spinData
     }
 
     solvedPuzzle(){
@@ -206,6 +219,21 @@ export class WOFGame{
     getSocketIDForActivePlayer(){
         return this.PlayerHandler.getCurrentPlayer().socketID
     }
+    /**
+     * 
+     * @param {boolean} value 
+     */
+    setWaitingForGuess(value){
+        this.isWaitingForGuess = value
+    }
+    /**
+     * 
+     * @param {boolean} value 
+     */
+    setWaitingForSpin(value){
+        this.isWaitingForSpin = value
+    }
+
 
     createTestEnvironment(){
         console.log('Creating Test players')
