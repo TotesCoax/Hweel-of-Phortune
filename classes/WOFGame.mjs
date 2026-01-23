@@ -174,7 +174,7 @@ export class WOFGame{
 
     /**
      * 
-     * @returns {object}
+     * @returns {{Board: Board, Wheel: Wheel, PlayerHandler: PlayerHandler}}
      */
     getGamestate(){
         this.PlayerHandler.setActivePlayer()
