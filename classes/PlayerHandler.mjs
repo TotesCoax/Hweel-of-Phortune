@@ -83,6 +83,9 @@ export class PlayerHandler{
         if (index < 0){
             index = this.players.findIndex(seat => seat.socketID === playerId)
         }
+        if (index < 0){
+            index = this.players.findIndex(seat => seat.name === playerId)
+        }
         return index
     }
     getPlayer(playerId){
@@ -119,7 +122,9 @@ export class PlayerHandler{
         this.players.forEach(player => player.setScore(0))
     }
     setActivePlayer(){
-        this.players.forEach(player => player.isActive = false)
-        this.players[this.turnIndicator].isActive = true
+        if (this.players.length > 0){
+            this.players.forEach(player => player.isActive = false)
+            this.players[this.turnIndicator].isActive = true
+        }
     }
 }
