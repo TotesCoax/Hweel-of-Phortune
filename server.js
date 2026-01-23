@@ -18,8 +18,8 @@ const GameServer = new LocallyConnectedServer('client')
 GameServer.io.on(EventCode.connection, (socket) => {
     console.log("It appears we have a visitor. Put on the tea.", socket.id)
     socket.on(EventCode.disconnect, (reason) => {
-        console.log(WOF.PlayerHandler.getPlayer(socket.id))
-        WOF.handlePlayerDisconnect()
+        console.log(WOF.PlayerHandler.getPlayer(socket.id), socket.id)
+        WOF.handlePlayerDisconnect(socket.id)
         changeNotificationToBoard()
         console.log(`${socket.id} disconnected. Reason: ${reason}`)
     })
@@ -45,6 +45,10 @@ GameServer.io.on(EventCode.connection, (socket) => {
     })
     // Direct to player message
     function notificationToActivePlayer(){
+        if (WOF.PlayerHandler.players.length <= 0){
+            return
+        }
+        console.log('Sending turn notice.')
         let currentPlayer = WOF.getSocketIDForActivePlayer()
         socket.to(currentPlayer).emit('yourTurn', "You're up, dingus")
     }
@@ -57,14 +61,16 @@ GameServer.io.on(EventCode.connection, (socket) => {
         console.log(`${data, WOF.PlayerHandler.getCurrentPlayer().name}'s guess: ${data}`)
         WOF.playerGuess(data, WOF.PlayerHandler.getCurrentPlayer().gameID)
         changeNotificationToBoard()
+        notificationToActivePlayer()
+        WOF.setWaitingForSpin(true)
     })
 
     socket.on('gameFile', (data) => {
         console.log(data)
         WOF.PuzzleQueue.populateQueue(CSVParser.csvToArray(data))
         WOF.createNewBoard(WOF.nextPuzzle())
-        notificationToActivePlayer()
         changeNotificationToBoard()
+        notificationToActivePlayer()
     })
 
     socket.on('nextRound', (data) => {
@@ -72,10 +78,12 @@ GameServer.io.on(EventCode.connection, (socket) => {
         WOF.nextPuzzle()
         notificationToActivePlayer()
         changeNotificationToBoard()
+        notificationToActivePlayer()
+        WOF.setWaitingForSpin(true)
+        WOF.Board.board.forEach(row => {console.table(row)})
     })
 
     //Manual Mode
-
     socket.on('manualAdd', (data) => {
         console.log(`Adding new player manually: ${data}`)
         WOF.PlayerHandler.addPlayer(data, 'manual')
@@ -91,16 +99,8 @@ GameServer.io.on(EventCode.connection, (socket) => {
 
     socket.on('offlineSpin', (data) => {
         console.log('Offline spin', data)
-            let startingDeg = WOF.Wheel.currentDeg,
-            spinValue = (WOF.Wheel.getRandomValue(1, 50)/100),
-            spinPower = WOF.spinWheel(spinValue),
-            endingDeg = WOF.Wheel.currentDeg,
-            wheelIndex = WOF.Wheel.getWheelIndex()
-        console.log(`Current Value: ${WOF.Wheel.getWheelValue()}, SpinValue: ${spinValue}`)
-        WOF.handleSpecialSpace(WOF.Wheel.getWheelValue())
-        console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
-        let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
-        console.log(spinData)
+        let spinValue = (WOF.Wheel.getRandomValue(5, 40)/100)
+        WOF.spinWheel(spinValue)
         GameServer.io.to('board').emit('wheelSpin', spinData)
     })
 
@@ -121,30 +121,43 @@ GameServer.io.on(EventCode.connection, (socket) => {
             WOF.PlayerHandler.getPlayer(id).setConnectedStatus(true)
             changeNotificationToBoard()
             callback(WOF.PlayerHandler.getPlayer(id))
+            if (WOF.PlayerHandler.isActivePlayer(id)){
+                notificationToActivePlayer()
+            }
         }
         // Add them to the players channel
         socket.join('players')
         console.table(WOF.PlayerHandler.players)
         console.log(`Player joined room`)
     })
-    
     // A player sends spin data to the server
     socket.on(EventCode.speedData, (data) => {
-        console.log(data)
+        console.log(data, WOF.isWaitingForGuess, WOF.isWaitingForSpin)
         // Check if the player is the active player, ignore all other submissions (let the players have freedom to fiddle with it)
         if(WOF.PlayerHandler.isActivePlayer(data.id)){
-            let startingDeg = WOF.Wheel.currentDeg,
-                spinPower = WOF.spinWheel(data.value),
-                endingDeg = WOF.Wheel.currentDeg,
-                wheelIndex = WOF.Wheel.getWheelIndex()
-            console.log(`Current Value: ${WOF.Wheel.getWheelValue()}`)
-            WOF.handleSpecialSpace(WOF.Wheel.getWheelValue())
-            console.log(`Starting: ${startingDeg}, Power: ${spinPower}, Ending: ${endingDeg}`)
-            let spinData = {start: startingDeg, power: spinPower, end: endingDeg, index: wheelIndex}
-            console.log(spinData)
+            if(!WOF.isWaitingForSpin){
+                return
+            }
+            let spinData = WOF.spinWheel(data.value)
             GameServer.io.to('board').emit('wheelSpin', spinData)
+            if(spinData.power <= 180){
+                WOF.setWaitingForSpin(true)
+                WOF.setWaitingForGuess(false)
+            } else {
+                WOF.setWaitingForSpin(false)
+                WOF.setWaitingForGuess(true)
+            }
         }
     })
+
+    socket.on('spinAnimEnded', (data) => {
+        if(WOF.isWaitingForGuess && !WOF.isWaitingForSpin){
+            socket.to('board').emit('guessReady', 'Ready for a guess input')
+            return
+        }
+        notificationToActivePlayer()
+    })
+
     socket.on(EventCode.nameChange, (data) => {
         let player = WOF.PlayerHandler.getPlayer(data.id)
         player.setName(data.name)
