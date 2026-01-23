@@ -72,7 +72,7 @@ export class Wheel{
      */
     spinWheel(speedFromPhone){
         let rotation = this.calcWheelSpinPowerInDegrees(speedFromPhone)
-        console.log(`Power Rating: ${rotation}, spinning from ${this.currentDeg} to ${this.currentDeg + rotation}`)
+        console.log(`Power Rating: ${rotation}, spinning from ${this.currentDeg} to ${this.currentDeg + rotation}, using speed: ${speedFromPhone}`)
         this.currentDeg += rotation
         this.resetCurrentDeg()
         return rotation
@@ -92,6 +92,9 @@ export class Wheel{
         let reading = this.sections[this.getWheelIndex()]
         console.log("reading:", reading, Math.floor(this.currentDeg/this.sectionWidthInDeg))
         return reading
+    }
+    getCurrentDeg(){
+        return this.currentDeg
     }
 }
 
