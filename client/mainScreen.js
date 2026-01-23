@@ -104,6 +104,7 @@ function spinWheel(dataFromServer){
     wheelContainer.addEventListener('animationend', () => {
         resetCurrentDeg()
         setFlashingSection(dataFromServer.index)
+        socket.emit('spinAnimEnded', "Let's go again!")
     }, {once: true})
     wheelContainer.classList.add('spinning')
 }
