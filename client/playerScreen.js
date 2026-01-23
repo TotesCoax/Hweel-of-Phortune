@@ -26,15 +26,26 @@ function getPlayerDataFromLocal(){
 const socket = io({transports: ['websocket', 'polling', 'flashsocket']})
 
 socket.on("connect", () => {
-    console.log(socket.id)
-    let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().gameID : 'Nothing'
-    console.log('Connected as: ', playerID)
-    socket.emit('playerJoin', playerID, (res) => {
-      console.log(res)
-      updateInputFields(res)
-      updateLocalStorage(res)
-      console.log('Handshake complete, local storage updated.')
-    })
+  console.log(socket.id)
+  let playerID = window.localStorage.getItem('playerInfo') ? getPlayerDataFromLocal().gameID : 'Nothing'
+  console.log('Connected as: ', playerID)
+  socket.emit('playerJoin', playerID, (res) => {
+    console.log(res)
+    updateInputFields(res)
+    updateLocalStorage(res)
+    console.log('Handshake complete, local storage updated.')
+  })
+})
+
+const powerBar = document.getElementById("powerBar")
+
+
+socket.on('yourTurn', () => {
+  console.log('Spin Turn Registered')
+  powerBar.addEventListener('animationend', () => {
+    powerBar.classList.remove('flashing')
+  }, {once: true})
+  powerBar.classList.add('flashing')
 })
 
 // Power Bar shit
@@ -91,25 +102,25 @@ function calculateScrollSpeedInterval(){
 }
 
 // Scroll Meter Sizing
-function resizePowerBar(){
-  let powerBar = document.getElementById("powerBar"),
-      viewportHeight = window.outerHeight,
-      containerHeight = Math.round(viewportHeight),
-      barTotalHeight = Math.round(containerHeight * 2.0),
-      blackRatio = Math.round((containerHeight/barTotalHeight)*100),
-      colorFactor = Math.round((100 - blackRatio)/3)
+// function resizePowerBar(){
+//   let powerBar = document.getElementById("powerBar"),
+//       viewportHeight = window.outerHeight,
+//       containerHeight = Math.round(viewportHeight),
+//       barTotalHeight = Math.round(containerHeight * 2.0),
+//       blackRatio = Math.round((containerHeight/barTotalHeight)*100),
+//       colorFactor = Math.round((100 - blackRatio)/3)
 
-  console.log(containerHeight, barTotalHeight, blackRatio, colorFactor)
+//   console.log(containerHeight, barTotalHeight, blackRatio, colorFactor)
 
-  scrollPowerContainer.style.height = `${containerHeight}px`
-  powerBar.style.height = `${barTotalHeight}px`
+//   scrollPowerContainer.style.height = `${containerHeight}px`
+//   powerBar.style.height = `${barTotalHeight}px`
 
-  powerBar.style.background = `linear-gradient(black, black ${blackRatio}%, green ${blackRatio+colorFactor}%,yellow ${blackRatio+colorFactor*2}%, red 100%)`
+//   powerBar.style.background = `linear-gradient(black, black ${blackRatio}%, green ${blackRatio+colorFactor}%,yellow ${blackRatio+colorFactor*2}%, red 100%)`
   
-  return [scrollPowerContainer.style.height, powerBar.style.height]
-}
+//   return [scrollPowerContainer.style.height, powerBar.style.height]
+// }
 
-resizePowerBar()
+// // resizePowerBar()
 
 
 // Menu Stuff
@@ -137,6 +148,7 @@ nameInput.addEventListener('input', () => {
 })
 
 colorInput.addEventListener('input', () => {
+  document.documentElement.style.setProperty('--playerBGColor', `${colorInput.value}`)
   socket.emit('colorChange', {id: getPlayerDataFromLocal().gameID, color: colorInput.value})
 })
 
@@ -147,6 +159,7 @@ colorInput.addEventListener('input', () => {
 function updateInputFields(data){
       updateElementValue(nameInput, data.name)
       updateElementValue(colorInput, data.color)
+      document.documentElement.style.setProperty('--playerBGColor', `${colorInput.value}`)
 }
 
 /**

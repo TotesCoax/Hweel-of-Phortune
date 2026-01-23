@@ -1,3 +1,8 @@
+/* This turns off the pull to refresh and the drag from top stuff. */
+:root {
+    --playerBGColor: #fff;
+}
+
 html, body, #scrollPowerContainer {
     margin: 0;
     overscroll-behavior: none;
@@ -25,12 +30,12 @@ input[type=color]{
 
 #scrollPowerContainer {
     width: 90vw;
-    height: 95vh;
+    height: 100vh;
     overflow-y: scroll;
 }
 
 #powerBar {
-    background: linear-gradient(black, black 40%, green 40%,yellow 70%, red 100%);
+    background: linear-gradient(black, black 50%, green 60%,yellow 75%, red 95%);
     width: 100%;
     height: 200vh;
 }
@@ -50,4 +55,20 @@ input[type=color]{
 
 .hidden {
     display: none !important;
+}
+
+#powerBar.flashing {
+    animation-name: flashWhite;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes flashWhite {
+    from {
+        background: rgb(0, 0, 0);
+    }
+    to {
+        background: var(--playerBGColor);
+    }
 }
