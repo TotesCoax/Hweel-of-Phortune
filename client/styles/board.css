@@ -79,6 +79,6 @@
 #clueContainer p {
     font-family: 'Times New Roman', Times, serif;
     background-color: var(--white);
-    padding: 2%;
+    padding: 3% 6%;
     border-radius: 1vw;
 }
