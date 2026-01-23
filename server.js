@@ -68,7 +68,8 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on('gameFile', (data) => {
         console.log(data)
         WOF.PuzzleQueue.populateQueue(CSVParser.csvToArray(data))
-        WOF.createNewBoard(WOF.nextPuzzle())
+        WOF.createNewBoard('Puzzles Loaded', "Press next round to begin!")
+        WOF.Board.revealAllLetters()
         changeNotificationToBoard()
         notificationToActivePlayer()
     })
@@ -76,11 +77,9 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on('nextRound', (data) => {
         console.log(data)
         WOF.nextPuzzle()
-        notificationToActivePlayer()
         changeNotificationToBoard()
         notificationToActivePlayer()
         WOF.setWaitingForSpin(true)
-        WOF.Board.board.forEach(row => {console.table(row)})
     })
 
     //Manual Mode
@@ -100,7 +99,7 @@ GameServer.io.on(EventCode.connection, (socket) => {
     socket.on('offlineSpin', (data) => {
         console.log('Offline spin', data)
         let spinValue = (WOF.Wheel.getRandomValue(5, 40)/100)
-        WOF.spinWheel(spinValue)
+        let spinData =WOF.spinWheel(spinValue)
         GameServer.io.to('board').emit('wheelSpin', spinData)
     })
 

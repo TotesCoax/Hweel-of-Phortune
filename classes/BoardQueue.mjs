@@ -2,10 +2,6 @@ import { BasicQueue } from "./BasicQueue.mjs"
 import { BoardPuzzle } from "./BoardPuzzle.mjs"
 
 export class BoardQueue extends BasicQueue {
-    /**
-     * 
-     * @param {string[][]} arrayOfParsedPuzzles 
-     */
     constructor(){
         super()
     }
@@ -19,7 +15,8 @@ export class BoardQueue extends BasicQueue {
         for (const puzzle of puzzlesArray) {
             newQueue.push(new BoardPuzzle(puzzle[0],puzzle[1]))
         }
-        console.log(newQueue)
+        //Remove the header row
+        newQueue.shift()
         return newQueue
     }
     populateQueue(array){

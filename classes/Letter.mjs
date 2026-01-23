@@ -20,11 +20,12 @@ export class Letter{
         this.character = char.toUpperCase()
         this.isLetter = this.setLetter()
         this.isVowel = this.setVowel()
+        this.isNumber = this.setNumber()
         this.isPunc = this.setPunc()
         if(this.isPunc){
             this.isRevealed = true
         }
-        if(this.isLetter || this.isPunc){
+        if(this.isLetter || this.isPunc || this.isNumber){
             this.isSpace = true
         }
     }
@@ -33,7 +34,7 @@ export class Letter{
      * @param {string} char 
      * @returns {boolean}
      */
-    setVowel(char){
+    setVowel(){
         return 'AEIOU'.includes(this.character)
     }
     /**
@@ -41,7 +42,7 @@ export class Letter{
      * @param {string} char 
      * @returns {boolean}
      */
-    setLetter(char){
+    setLetter(){
         return 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().includes(this.character)
     }
     /**
@@ -49,7 +50,16 @@ export class Letter{
      * @param {string} char 
      * @returns {boolean}
      */
-    setPunc(char){
+    setNumber(){
+        return '0123456789'.includes(this.character)
+
+    }
+    /**
+     * 
+     * @param {string} char 
+     * @returns {boolean}
+     */
+    setPunc(){
         return '.,\'\"?!&'.toUpperCase().includes(this.character)
     }
     revealLetter(){

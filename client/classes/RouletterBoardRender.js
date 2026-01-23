@@ -41,6 +41,10 @@ export class RouletterBoardRender {
         if (data.isSpace){
             tdHolder.classList.add('game-space')
         }
+        if(data.isNumber){
+            letterEL.innerText = "#"
+            letterEL.classList.add('revealed')
+        }
         if (data.isRevealed){
             letterEL.innerText = data.character
             letterEL.classList.add('revealed')

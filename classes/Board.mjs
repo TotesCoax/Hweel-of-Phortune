@@ -60,7 +60,7 @@ export class Board{
             rows = []
         for (let i = 0; i < words.length; i++) {
             // check if next word would break past column count. if yes push to return array and reset otherwise continue
-            if(rack.length + words[i].length > this.colCount){
+            if(rack.length + words[i].length >= this.colCount){
                 rows.push(rack)
                 rack = ''
             }
@@ -156,7 +156,7 @@ export class Board{
     revealAllLetters(){
         this.board.forEach(row => {
             row.forEach(space =>{
-                if (space.isLetter){
+                if (space.isSpace){
                     space.revealLetter()
                 }
             })
