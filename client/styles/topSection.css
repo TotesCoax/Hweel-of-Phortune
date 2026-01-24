@@ -36,3 +36,8 @@
     padding: 1em;
 }
 
+#manualMode {
+    z-index: +1;
+    position: relative;
+    background-color: var(--white);
+}
