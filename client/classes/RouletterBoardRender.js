@@ -107,4 +107,20 @@ export class RouletterBoardRender {
         })
         this.guessedElement.append(title, lettersEL)
     }
+    /**
+     * 
+     * @param {HTMLElement[]} elementsToAnimateArray 
+     */
+    revealAnimation(elementsToAnimateArray, classNameToAdd){
+        if (elementsToAnimateArray.length === 0){
+            return
+        }
+        let currentAnim = elementsToAnimateArray.shift()
+        currentAnim.addEventListener('animationend', () => {
+            this.revealAnimation(elementsToAnimateArray, classNameToAdd)
+            currentAnim.classList.remove(classNameToAdd)
+        }, {once: true})
+        currentAnim.classList.add(classNameToAdd)
+    }
+
 }
