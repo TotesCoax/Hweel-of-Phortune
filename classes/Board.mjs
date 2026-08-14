@@ -7,7 +7,7 @@ export class Board{
      * @param {string} clue Clue to display to players
      * @param {string} phrase The Phrase the players need to solve
      */
-    constructor(logFilePath = "./", options = {clue:"Have fun!", phrase:"Welcome to Rouletters!"}){
+    constructor(logFilePath = "./", options = {clue:"Have fun!", phrase:"Welcome to Rouletters!", guessedLetters: new Array(0), isSolved:false}){
         this.BoardLogger = new Logger(logFilePath, "Board")
         this.rowCount = 4
         this.colCount = 12
@@ -17,9 +17,9 @@ export class Board{
         this.board = this.generateBoard()
         this.racks = this.rackRows(this.phrase)
         this.populateBoard(this.racks)
-        this.guessedLetters = []
+        this.guessedLetters = options.guessedLetters ? options.guessedLetters : new Array(0)
         this.clue = options.clue
-        this.isSolved = false
+        this.isSolved = options.isSolved
     }
     /**
      * Checks if phrase is too long to parse into the board.
@@ -153,7 +153,7 @@ export class Board{
                 }
             }
         }
-        this.BoardLogger.info(`Letters found: ${numFoundLetters} ${this.guessedLetters}'s`)
+        this.BoardLogger.info(`Letters found: ${numFoundLetters} ${guessLetter}'s All: ${this.guessedLetters}`)
         return numFoundLetters
     }
     /**

@@ -100,6 +100,10 @@ export class RouletterBoardRender {
 
         title.innerText = "Guessed Letters:"
 
+        if (!arrayOfChars){
+            return
+        }
+
         arrayOfChars.forEach(letter =>{
             let newSpan = document.createElement('span')
             newSpan.innerText = letter

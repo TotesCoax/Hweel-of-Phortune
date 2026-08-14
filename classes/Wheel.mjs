@@ -1,20 +1,22 @@
 import { Logger } from "./Logger.mjs"
 
 export class Wheel{
-    constructor(logFilePath = "./", options = {sections:[]}){
+    constructor(logFilePath = "./", options = {sections: new Array(0)}){
         this.WheelLogger = new Logger(logFilePath, "Wheel")
-        this.sections = options.sections
-        this.sectionWidthInDeg = 0
         this.currentDeg = 0
         this.minValue = 3
         this.maxValue = 9
         this.speedPowerFactor = 40 //7.2 is roughly the factor to get a 50 power spin to go 360 degrees, if i did the math correct (360/50)
-        this.generateSections()
+        /** @type {Array} */
+        this.sections = options.sections.length > 0 ? options.sections : this.generateSections()
+        this.sectionWidthInDeg = 360 / this.sections.length 
+        this.shuffleSections()
     }
     /**
      * 
      * @param {number} bonusValue the one big bonus space value, it increases each round in the game.
      * @param {number} numberOfSections number of sections in the wheel, defaults to 24
+     * @returns {number[]} Array of sections,  you should shuffle them.
      */
     generateSections(bonusValue = 1000, numberOfSections = 24){
         let sectionValues = [],
@@ -24,10 +26,9 @@ export class Wheel{
             sectionValues.push(this.getRandomValue(this.minValue, this.maxValue))
         }
         sectionValues.push(bonusValue, 'bankrupt', 'lose a turn', 'lose a turn')
-        this.sections = sectionValues
-        this.shuffleSections()
-        this.sectionWidthInDeg = 360 / this.sections.length
+        this.sectionWidthInDeg = 360 / sectionValues.length
         this.WheelLogger.info(`Wheel sections generated`)
+        return sectionValues
     }
     /**
      * Generates random values for the board. For right now I don't care much for distribution balance of scores.

@@ -15,6 +15,11 @@ import { CSVParser } from './classes/CSVParser.mjs'
 // Utility Imports
 import { Logger } from './classes/Logger.mjs'
 
+//Save System
+import { SaveSystem } from './classes/SaveSystem.mjs'
+import { SaveState } from './classes/SaveState.mjs'
+import { Player } from './classes/Player.mjs'
+
 async function main(){
 
     const LogDirectory = path.resolve("./logs/")
@@ -33,7 +38,7 @@ async function main(){
             } else {
                 ServerLogger.log(`Board disconnected ${reason} ${socket.id}`, {tags: ["disconnect", "socketIO"]})
             }
-            changeNotificationToBoard()
+            changeNotificationToBoard({updateSaveState: false})
         })
         // Board Events
         // The Board connects to the server
@@ -69,8 +74,11 @@ async function main(){
             socket.to(currentPlayer).emit(WOFGame.TURNRESULT.SPIN)
         }
         // Notice to Board screen that a change has occured and needs to rerender.
-        function changeNotificationToBoard(){
+        function changeNotificationToBoard(options = {updateSaveState: true}){
             ServerLogger.log(`Boardstate change. Sending data to board.`, {tags: ["gameAction", "socketIO"]})
+            if (options.updateSaveState){
+                GameSaveSystem.updateState(WOF)
+            }
             GameServer.io.to('board').emit('playerUpdate', WOF.getGamestate())
         }
     
@@ -127,13 +135,13 @@ async function main(){
             ServerLogger.log(`Adding new player manually: ${data}`, {tags: ["gameAction", "socketIO"]})
             WOF.PlayerHandler.addPlayer(data, 'manual')
             WOF.PlayerHandler.getPlayer(data).setName(data)
-            changeNotificationToBoard()
+            changeNotificationToBoard({updateSaveState: false})
         })
     
         socket.on('manualRemove', (data) => {
             ServerLogger.log(`Removing player manually: ${data}`, {tags: ["gameAction", "socketIO"]})
             let removed = WOF.PlayerHandler.removePlayer(data)
-            changeNotificationToBoard()
+            changeNotificationToBoard({updateSaveState: false})
         })
 
         socket.on('setScore', (data) =>{
@@ -167,15 +175,15 @@ async function main(){
                 // If the player does not exist in the player list, aka truly new player, create a new ID for them, add it to the list, and return the ID to the client for identity storage.
                 ServerLogger.log(`Creating new player.`, {tags:["gameSetup", "player"]})
                 let newPlayerID = makeID()
-                WOF.PlayerHandler.addPlayer(newPlayerID, socket.id)
-                changeNotificationToBoard()
+                WOF.PlayerHandler.addPlayer(new Player(newPlayerID, socket.id))
+                changeNotificationToBoard({updateSaveState: false})
                 callback(WOF.PlayerHandler.getPlayer(newPlayerID))
             } else {
                 // If the player exists, send them their player ID to confirm connection.
                 ServerLogger.info(`Player reconnect detected: ${WOF.PlayerHandler.getPlayer(id).name}`, {tags: ["gameAction", "player"]})
                 WOF.PlayerHandler.getPlayer(id).setSocketID(socket.id)
                 WOF.PlayerHandler.getPlayer(id).setConnectedStatus(true)
-                changeNotificationToBoard()
+                changeNotificationToBoard({updateSaveState: false})
                 callback(WOF.PlayerHandler.getPlayer(id))
                 if (WOF.PlayerHandler.isActivePlayer(id)){
                     notificationToActivePlayer(WOFGame.TURNRESULT.NOTHING)
@@ -254,6 +262,13 @@ async function main(){
             }
         })
         // Game Actions
+
+        //Utility Actions
+        socket.on('recovery', async (data) => {
+           let recovery = await GameSaveSystem.openState(GameSaveSystem.filePath)
+           WOF.recoverFromSaveState(recovery)
+           changeNotificationToBoard({updateSaveState: false})
+        })
         
     })
     
@@ -279,7 +294,12 @@ async function main(){
     ServerLogger.log(`Starting instance of game`, {tags:["gameAction"]})
     Logger.setLoggingLevel('INFO')
     Logger.getLoggingLevel()
+    
+    const GameSaveSystem = new SaveSystem(LogDirectory, "./gamestate/GAMESTATE.txt")
     const WOF = new WOFGame(LogDirectory)
+
+    // WOF.createTestEnvironment()
+    // GameSaveSystem.updateState(WOF)
 }
 
-main()
+ main()

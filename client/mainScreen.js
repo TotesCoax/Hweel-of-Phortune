@@ -303,3 +303,11 @@ function spinWheel(dataFromServer){
             messageCenter.append(createMsgEl("GUESS"))
         }
     }
+
+    //Save Recovery
+    const saveRecover = document.getElementById("saveRecover")
+    saveRecover.addEventListener('click', handleSaveRecoverClick)
+
+    function handleSaveRecoverClick(){
+        socket.emit('recovery')
+    }

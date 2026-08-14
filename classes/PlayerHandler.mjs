@@ -58,18 +58,24 @@ export class PlayerHandler{
     }
     /**
      * Adds a new player class to the array and returns their game ID, to be sent to client for saving.
+     * @param {Player} playerObj - 
      * @returns {string} uuid for game session
      */
-    addPlayer(gameID, socketID, playerName = `Player ${this.players.length + 1}`){
-        if (this.isPlayerExists(gameID)){
+    addPlayer(playerObj, options = {recoveryAttempt: false}){
+        if (this.isPlayerExists(playerObj.gameID)){
             console.log("Player already exists.")
+            if (options.recoveryAttempt){
+                this.players.push(playerObj)
+            }
             return
         }
-        let newPlayer = new Player(gameID, socketID, playerName)
-        this.players.push(newPlayer)
-        this.TurnLogger.info(`Added player to game: ${newPlayer.name}`)
-        this.TurnLogger.log(`Player Socket ID: ${newPlayer.socketID}`)
-        return newPlayer.id
+        if (playerObj.name === "defaultName"){
+            playerObj.name = `Player ${this.players.length + 1}`
+        }
+        this.players.push(playerObj)
+        this.TurnLogger.info(`Added player to game: ${playerObj.name}`)
+        this.TurnLogger.log(`Player Socket ID: ${playerObj.socketID}`)
+        return playerObj.id
     }
     removePlayer(id){
         if (!this.isPlayerExists(id)){
@@ -143,7 +149,16 @@ export class PlayerHandler{
     }
     setActivePlayer(){
         if (this.players.length > 0){
-            this.players.forEach(player => player.isActive = false)
+            this.players.forEach(player => {
+                try {
+                    player.isActive = false
+                } catch (err) {
+                    this.TurnLogger.warn(`Active player not currently connected.`)
+                } finally {
+                    return
+                }
+
+            })
             this.players[this.turnIndicator].isActive = true
             this.TurnLogger.log(`${this.players[this.turnIndicator].name} is now the active player.`)
         }

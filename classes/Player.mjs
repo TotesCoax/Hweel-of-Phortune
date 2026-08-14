@@ -4,15 +4,15 @@ export class Player{
      * 
      * @param {number} id unique ID for the player 
      */
-    constructor(gameID, socketID, defaultName){
+    constructor(gameID, socketID, options = {name: "defaultName", score: 0, totalScore: 0, color: "#FFF", isConnected: true, isActive: false}){
         this.gameID = gameID
-        this.name = defaultName
-        this.score = 0
-        this.totalScore = 0
-        this.color = '#FFF'
+        this.name = options.name
+        this.score = options.score ? options.score : 0
+        this.totalScore = options.totalScore ? options.totalScore : 0
+        this.color = options.color ? options.color : "#000"
         this.socketID = socketID
-        this.isConnected = true
-        this.isActive = false
+        this.isConnected = options.isConnected ? options.isConnected : true
+        this.isActive = options.isActive ? options.isActive : false
     }
     /**
      * Increments the score for player.

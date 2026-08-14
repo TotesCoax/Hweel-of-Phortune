@@ -11,6 +11,8 @@ import { Letter } from './Letter.mjs'
 import { Player } from './Player.mjs'
 import { BoardQueue } from './BoardQueue.mjs'
 import { Logger } from './Logger.mjs'
+import { SaveState } from './SaveState.mjs'
+import { SaveSystem } from './SaveSystem.mjs'
 
 export class WOFGame{
 
@@ -357,24 +359,53 @@ export class WOFGame{
         this.isWaitingForSpin = value
         this.GameLogger.log(`Setting waiting for spin to ${value}. Waiting state: Spin ${this.isWaitingForSpin} , Guess ${this.isWaitingForGuess}`)
     }
+    /**
+     * 
+     * @param {SaveState} SaveState 
+     */
+    recoverFromSaveState(SaveState){
+
+        //Recovering the board
+        this.createNewBoard(SaveState.Board.clue, SaveState.Board.phrase)
+        this.Board.board.forEach(row => {
+            row.forEach(letter => {
+                letter.isRevealed = SaveState.Board.guessedLetters.join(" ").toLowerCase().includes(letter.character.toLowerCase())
+            })
+        })
+        this.Board.isSolved = SaveState.Board.isSolved
+        this.Board.guessedLetters = SaveState.Board.guessedLetters
+
+        //Recovering the players
+        this.PlayerHandler.turnIndicator = SaveState.PlayerHandler.turnIndicator
+        SaveState.PlayerHandler.players.forEach(player => {
+            this.PlayerHandler.addPlayer(player)
+        })
+
+        //Recovering the Wheel
+        this.Wheel = new Wheel(this.GameLogger.fileDirectory, {sections:SaveState.Wheel.sections})
+
+        //Recovering the Puzzle Queue
+        if (SaveState.PuzzleQueue.length > 0){
+            SaveState.PuzzleQueue.forEach(item => {
+                this.PuzzleQueue.enqueue(item)
+            })
+        }
+
+        //Recovering static props
+        this.isWaitingForSpin = SaveState.isWaitingForSpin
+        this.isWaitingForGuess = SaveState.isWaitingForGuess
+    }
 
     createTestEnvironment(){
         console.log('Creating Test players')
-        this.PlayerHandler.addPlayer('aaaa', '1111')
-        this.PlayerHandler.addPlayer('bbbb', '2222')
-        this.PlayerHandler.addPlayer('cccc', '3333')
-        this.PlayerHandler.addPlayer('dddd', '4444')
-        this.PlayerHandler.addPlayer('eeee', '5555')
-        this.PlayerHandler.addPlayer('ffff', '6666')
+        this.PlayerHandler.addPlayer('aaaa', '1111', {color: '#ff0000'})
+        this.PlayerHandler.addPlayer('bbbb', '2222', {color: '#89cff0'})
+        this.PlayerHandler.addPlayer('cccc', '3333', {color: '#ee82ee'})
+        this.PlayerHandler.addPlayer('dddd', '4444', {color: '#000'})
+        this.PlayerHandler.addPlayer('eeee', '5555', {color: '#fff'})
+        this.PlayerHandler.addPlayer('ffff', '6666', {color: '#ffa500'})
         console.log('Generating random scores')
         this.PlayerHandler.players.forEach(player => player.setScore(this.Wheel.getRandomValue(1,20)))
-        console.log('Applying custom colors')
-        this.PlayerHandler.players[0].setColor('#ff0000')
-        this.PlayerHandler.players[1].setColor('#89cff0')
-        this.PlayerHandler.players[2].setColor('#ee82ee')
-        this.PlayerHandler.players[3].setColor('#000')
-        this.PlayerHandler.players[4].setColor('#fff')
-        this.PlayerHandler.players[5].setColor('#ffa500')
         console.table(this.PlayerHandler.players)
         this.PlayerHandler.players[4].setConnectedStatus(false)
     }
