@@ -246,7 +246,7 @@ async function main(){
             try {
                 let player = WOF.PlayerHandler.getPlayer(data.id)
                 player.setName(data.name)
-                changeNotificationToBoard()                
+                changeNotificationToBoard({updateSaveState: false})                
             } catch (error) {
                 ServerLogger.error(`Name change update failed: ${error}`)
             }
@@ -256,7 +256,7 @@ async function main(){
             try {
                 let player = WOF.PlayerHandler.getPlayer(data.id)
                 player.setColor(data.color)
-                changeNotificationToBoard()                
+                changeNotificationToBoard({updateSaveState: false})                
             } catch (error) {
                 ServerLogger.error(`Color change update failed: ${error}`)
             }
