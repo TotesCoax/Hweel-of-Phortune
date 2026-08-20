@@ -253,7 +253,7 @@ export class WOFGame{
         let guessResult = this.Board.handleGuess(letter.character)
 
         if (guessResult <= 0){
-            this.GameLogger(`No ${letter.character} are in the puzzle.`)
+            this.GameLogger.warn(`No ${letter.character} are in the puzzle.`)
             this.PlayerHandler.advanceTurn()
             this.setWaitingForSpin(true)
             this.setWaitingForGuess(true)
