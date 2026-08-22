@@ -60,7 +60,7 @@ export class Letter{
      * @returns {boolean}
      */
     setPunc(){
-        return '.,\'\"?!&'.toUpperCase().includes(this.character)
+        return '.,\'\"?!&-:'.toUpperCase().includes(this.character)
     }
     revealLetter(){
         this.isRevealed = true
