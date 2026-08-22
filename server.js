@@ -133,8 +133,8 @@ async function main(){
         //Manual Mode
         socket.on('manualAdd', (data) => {
             ServerLogger.log(`Adding new player manually: ${data}`, {tags: ["gameAction", "socketIO"]})
-            WOF.PlayerHandler.addPlayer(data, 'manual')
-            WOF.PlayerHandler.getPlayer(data).setName(data)
+            WOF.PlayerHandler.addPlayer(new Player(makeID(),makeID(), {name: data}))
+            // WOF.PlayerHandler.getPlayer(data).setName(data)
             changeNotificationToBoard({updateSaveState: false})
         })
     
